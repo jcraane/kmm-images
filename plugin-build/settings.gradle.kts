@@ -8,4 +8,4 @@ pluginManagement {
 
 rootProject.name = ("kmm-images-plugin")
 
-include(":kmmresources")
+include(":kmmimages")
