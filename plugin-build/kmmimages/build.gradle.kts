@@ -21,9 +21,9 @@ java {
 
 gradlePlugin {
     plugins {
-        create("KmmResources") {
-            id = "dev.jamiecraane.plugins.kmmresources"
-            implementationClass = "com.capoax.kmmresources.plugin.KmmResourcesPlugin"
+        create("KmmImages") {
+            id = "dev.jamiecraane.plugins.kmmimages"
+            implementationClass = "com.capoax.kmmimages.plugin.KmmImagesPlugin"
             description = description
             version = "1.0.0-alpha04"
         }
@@ -46,7 +46,7 @@ pluginBundle {
 
 
     plugins {
-        getByName("KmmResources") {
+        getByName("KmmImages") {
             displayName = "Gradle plugin for generating localizable resources for Android and iOS in a Kotlin Multiplatform Mobile project"
         }
     }

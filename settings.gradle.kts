@@ -8,6 +8,6 @@ pluginManagement {
 
 rootProject.name = "kmm-images-composite-build"
 
-include("android-app")
+//include("android-app")
 includeBuild("plugin-build")
 

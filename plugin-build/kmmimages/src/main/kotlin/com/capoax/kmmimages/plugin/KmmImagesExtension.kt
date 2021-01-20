@@ -1,4 +1,4 @@
-package com.capoax.kmmimages
+package com.capoax.kmmimages.plugin
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Property

@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     id("com.android.application")
-//    id("dev.jamiecraane.plugins.kmmimages")
+    id("dev.jamiecraane.plugins.kmmimages")
 }
 
 repositories {
