@@ -8,7 +8,7 @@ class KmmImagesPlugin: Plugin<Project> {
         val extension = project.extensions.create(KmmImagesExtension.NAME, KmmImagesExtension::class.java, project)
 
         project.tasks.register(GenerateImagesTask.NAME, GenerateImagesTask::class.java) {
-            it.input.set(extension.input)
+            it.input.set(extension.input.get())
         }
     }
 }
