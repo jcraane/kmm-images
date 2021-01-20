@@ -4,7 +4,6 @@ import com.capoax.kmmimages.core.converters.ImageConverter
 import java.io.File
 
 class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
-
     val pngConversions = mapOf(
         "" to "xxxhdpi",
         "75%" to "xxhdpi",
@@ -13,10 +12,17 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
         "25%" to "mdpi"
     )
 
+    init {
+        pngConversions.forEach { resize, density ->
+            val outputFolder = outputFolder.resolve("drawable-$density")
+            outputFolder.deleteRecursively()
+            outputFolder.mkdirs()
+        }
+    }
+
     override fun convertPng(sourceImage: File) {
         pngConversions.forEach { resize, density ->
             val outputFolder = outputFolder.resolve("drawable-$density")
-            outputFolder.mkdirs()
             val arguments = if (!resize.isEmpty()) listOf("-resize", resize) else emptyList<String>()
 
 //            todo convert image here
