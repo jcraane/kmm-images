@@ -1,0 +1,108 @@
+greetings:
+  hello:
+    nl: Hallo vanuit common code
+    en: Hello from common code
+general:
+  button:
+    ok:
+      nl: "OK"
+      en: "OK"
+  yes:
+    nl: "Ja"
+    en: "Yes"
+  no:
+    nl: "Nee"
+    en: "No"
+  iDontKnow:
+    nl: "Weet ik niet"
+    en: >
+        I
+
+        don\'t know
+  ampersand1:
+    nl: Brood \u0026 boter
+  ampersand2:
+    nl: Brood & boter
+  ampersand3:
+    nl: "Nota \u0026 betalen"
+  withParams:
+    nl: "Een %1$s tekst met een %2$s"
+    en: "A piece of %1$s with a piece of %2$s"
+  error:
+    invalidField:
+      nl: "Ongeldige waarde"
+      en: "Invalid value"
+    tryAgainLater:
+      nl: "Controleer de internetverbinding en probeer het opnieuw."
+      en: "Check your internet connection and try again."
+unit:
+  gas:
+    nl: "m³"
+    en: "m³"
+  power:
+    u3:
+      nl: "kWh"
+      en: "kWh"
+    u6:
+      nl: "MWh"
+      en: "MWh"
+    u9:
+      nl: "GWh"
+      en: "GWh"
+exampleContent:
+  pages:
+    page1:
+      title:
+        nl: Titel pagina 1
+        en: Title page 1
+      body:
+        nl: Body pagina 1
+        en: Body page 1
+    page2:
+      title:
+        nl: Body pagina 1
+        en: Body page 1
+      body:
+        nl: >
+          - Dit is punt1
+
+          - Dit is punt 2
+
+          - Dit is punt 3
+        en: >
+          - This is point 1
+
+          - This is point 2
+
+          - This is point 3
+    page3:
+      title:
+        nl: Titel pagina 3
+        en: Title page 3
+      body:
+        checkmarks:
+          - nl: 24/7 telefonisch bereikbaar bij storingen
+            en: Available 24/7 by telephone in case of malfunctions
+          - nl: Voorrijkosten en arbeidsloon inbegrepen
+            en: Travel costs and labor included
+listofobjects:
+  categories:
+    samplecategory:
+      detailedDescription:
+        nl: Beschrijving van categorie
+        en: Description of category
+      content:
+        - 0:
+            title:
+              nl: Dit is de titel1
+              en: Title1
+            body:
+              nl: Dit is de body1
+              en: Body1
+        - 1:
+            title:
+              nl: Dit is de titel2
+              en: Title2
+            body:
+              nl: Dit is de body2
+              en: body2
