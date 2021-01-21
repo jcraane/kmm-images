@@ -18,14 +18,42 @@ class IOSImageConverter(private val assetsFolder: File) : ImageConverter {
     }
 
     override fun convertPng(sourceImage: File) {
-        TODO("Not yet implemented")
+        val imageName = sourceImage.nameWithoutExtension
+        val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
+        val imageList = mutableListOf<Image>()
+        pngConversions.forEach {  resize, scale ->
+            val arguments = mutableListOf<String>()
+            if (resize.isNotEmpty()) {
+                arguments + listOf("-resize", resize)
+            }
+            val scale = if (scale.isEmpty()) "" else "@$scale"
+            val fileName = "$imageName$scale.png"
+
+//            todo convert image
+
+            imageList += Image(
+                filename = fileName,
+                scale = if (scale.isEmpty()) "1x" else scale)
+        }
+
+        val contents = Contents(imageList)
+        contents.writeTo(imageSetFolder)
     }
 
     override fun convertPdf(sourceImage: File) {
-        TODO("Not yet implemented")
+        copyImage(sourceImage)
     }
 
     override fun convertJpg(sourceImage: File) {
-        TODO("Not yet implemented")
+        copyImage(sourceImage)
+    }
+
+    private fun copyImage(sourceImage: File) {
+        val imageName = sourceImage.nameWithoutExtension
+        val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
+        imageSetFolder.resolve(imageName).delete()
+        sourceImage.copyTo(imageSetFolder)
+
     }
 }
+
