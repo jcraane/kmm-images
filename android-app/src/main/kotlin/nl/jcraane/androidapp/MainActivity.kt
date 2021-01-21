@@ -13,6 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.greetingFromCommon).text = "kmm-images"
         println("CONTEXT = " + ApplicationContext.context)
-        findViewById<ImageView>(R.id.image).setImageDrawable(Images.PIANO.drawable(this))
+//        findViewById<ImageView>(R.id.image).setImageDrawable(Images.PIANO.drawable(this))
     }
 }

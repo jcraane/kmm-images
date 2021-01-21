@@ -5,5 +5,6 @@ object Images {
 	val ICON: Image = Image("icon")
 	val PIANO: Image = Image("piano")
 	val KEYBOARD: Image = Image("keyboard")
+	val IC_ARROW_RIGHT: Image = Image("ic_arrow_right")
 }
 

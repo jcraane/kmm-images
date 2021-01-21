@@ -52,8 +52,10 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
 
     override fun convertSvg(sourceImage: File) {
         println("AndroidImageConvert.convertSvg: convert $sourceImage")
-        val outputFolder = outputFolder.resolve("drawable")
-        outputFolder.mkdirs()
-        sourceImage.copyTo(outputFolder, overwrite = true)
+        val destination = outputFolder.resolve("drawable")
+        destination.mkdirs()
+        println("Copy $sourceImage to $destination")
+        sourceImage.copyTo(destination.resolve(sourceImage.name), overwrite = true)
+        println("Copied")
     }
 }

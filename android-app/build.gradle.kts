@@ -12,6 +12,7 @@ kmmImagesConfig {
     sharedModuleFolder.set(project.projectDir)
     androidSourceFolder.set("main")
     packageName.set("com.example.project")
+    pathToVdTool.set("vd-tool")
 }
 
 val generateImages = tasks["generateImages"]

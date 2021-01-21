@@ -27,6 +27,10 @@ abstract class GenerateImagesTask : DefaultTask() {
     @get:Option(option = "androidSourceFolder", description = "The source folder to generate the localizations class for Android. Defaults to main, but some multiplatform projects use androidMain.")
     abstract val androidSourceFolder: Property<String>
 
+    @get:Input
+    @get:Option(option = "pathToVdTool", description = "The path to vd-tool which is used to convert svg to xml.")
+    abstract val pathToVdTool: Property<String>
+
     @TaskAction
     fun generate() {
         println("About to generate images for all supported platforms.")
@@ -34,7 +38,8 @@ abstract class GenerateImagesTask : DefaultTask() {
             imagesFolder = imageFolder.get(),
             sharedModuleFolder = sharedModuleFolder.get(),
             androidMainFolder = androidSourceFolder.get(),
-            packageName = packageName.get()
+            packageName = packageName.get(),
+            pathToVdTool = pathToVdTool.get()
         ).generate()
     }
 

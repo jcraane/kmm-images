@@ -18,6 +18,8 @@ abstract class KmmImagesExtension @Inject constructor(project: Project) {
 
     val packageName: Property<String> = objects.property(String::class.java)
 
+    val pathToVdTool: Property<String> = objects.property(String::class.java)
+
     companion object {
         const val NAME = "kmmImagesConfig"
     }

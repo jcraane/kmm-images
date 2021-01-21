@@ -38,7 +38,18 @@ brew install ghostscript
 brew install potrace
 ```
 
-## svg2vd
+## vd-tool
+
+vd-tool is a tool used to convert svg to Android vector drawables. This tool is a pre-requisite if sgv files are used. See https://www.androiddesignpatterns.com/2018/11/android-studio-svg-to-vector-cli.html for more information. To setup vd-tool do the following:
+
+- Download the vd-tool.zip file
+- Extract the contents of the zip file to a folder of choice
+- Configure the plugin with the path to vd-tool. The recommended way is to add vd-tool/bin to your path so the only configuration needed is the following: pathToVdTool.set("vd-tool")
+- Restart the IDE or terminal to make sure the path settings are taken into account.
+
+Please note this tool is only required if raw svg files are used.
+
+## svg2vd (deprecated, not used anymore, see vd-tool above)
 
 svg2vd is used to convert svg images to Android xml format
 
@@ -76,6 +87,11 @@ JPG files (which should be used for photos) are not converted and have a fixed d
 
 - iOS: single image copied
 - Android: copied into mdpi, hdpi, xdpi, xxdpi and xxxdpi all with the same dimensions
+
+## SVG
+
+- iOS: images are converted to PDF and copied
+- Android: images are converted into xml drawables with vd-tool
 
 # Output
 

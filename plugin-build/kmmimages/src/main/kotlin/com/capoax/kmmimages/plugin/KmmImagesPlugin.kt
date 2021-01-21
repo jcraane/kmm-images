@@ -12,6 +12,7 @@ class KmmImagesPlugin: Plugin<Project> {
             it.packageName.set(extension.packageName.get())
             it.androidSourceFolder.set(extension.androidSourceFolder.get())
             it.sharedModuleFolder.set(extension.sharedModuleFolder.get())
+            it.pathToVdTool.set(extension.pathToVdTool.get())
         }
     }
 }

@@ -16,7 +16,8 @@ class Generator(
     val imagesFolder: File,
     val sharedModuleFolder: File,
     val androidMainFolder: String,
-    val packageName: String
+    val packageName: String,
+    val pathToVdTool: String
 ) {
     fun generate() {
         val buildFolder = sharedModuleFolder.resolve("build/images")
@@ -37,9 +38,13 @@ class Generator(
 
         // Convert svg
         val androidDrawableFolder = androidResFolder.createFolderIfNotExists("drawable")
-        val svg2vd = "/usr/local/bin/svg2vd -d ${androidDrawableFolder.path}"
+        println("Run vd-tool")
+        val vdTool = "$pathToVdTool -c -in ${androidDrawableFolder.path} -out ${androidDrawableFolder.path}"
+        val vdToolOutput = vdTool.runCommand(sharedModuleFolder)
+        println("Output of vd-tool = $vdToolOutput")
+        /*val svg2vd = "/usr/local/bin/svg2vd -d ${androidDrawableFolder.path}"
         val output = svg2vd.runCommand(sharedModuleFolder)
-        println("Output of svg2vd = $output")
+        println("Output of svg2vd = $output")*/
         androidDrawableFolder.deleteFiles { it.extension.endsWith("svg") }
 
         // Compile assets catalog
