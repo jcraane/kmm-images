@@ -13,15 +13,18 @@ data class CodeGenerator(val packageName: String) {
                 append("data class Image(val name: String)\n")
 
                 append("object Images {\n")
-                val images = images.map { image ->
+                images.map { image ->
                     "\tval ${image.imageNameToConst()}: Image = Image(\"$image\")"
-                }.joinToString { "\n" }
-                append(images)
+                }.forEach { line ->
+                    append(line)
+                    append("\n")
+                }
                 append("}\n\n")
             }
         }
 
     fun addImage(name: String) {
+        println("ADD IMAGE $name")
         images.add(name)
     }
 }

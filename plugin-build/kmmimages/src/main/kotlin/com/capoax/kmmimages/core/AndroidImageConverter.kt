@@ -22,6 +22,7 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
     }
 
     override fun convertPng(sourceImage: File) {
+        println("AndroidImageConvert.convertPng: convert $sourceImage")
         pngConversions.forEach { resize, density ->
             val outputFolder = outputFolder.resolve("drawable-$density")
             val arguments = if (!resize.isEmpty()) listOf("-resize", resize) else emptyList<String>()
@@ -31,6 +32,7 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
     }
 
     override fun convertPdf(sourceImage: File) {
+        println("AndroidImageConvert.convertPdf: convert $sourceImage")
         val outputFolder = outputFolder.resolve("drawable")
         outputFolder.mkdirs()
         val svgFileName = "${sourceImage.nameWithoutExtension}.svg"
@@ -38,6 +40,7 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
     }
 
     override fun convertJpg(sourceImage: File) {
+        println("AndroidImageConvert.convertJpg: convert $sourceImage")
         pngConversions.forEach { resize, density ->
             val outputFolder = outputFolder.resolve("drawable-$density")
             outputFolder.mkdirs()

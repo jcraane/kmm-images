@@ -19,7 +19,8 @@ class Generator(
     val packageName: String
 ) {
     fun generate() {
-        val buildFolder = sharedModuleFolder.createFolderIfNotExists("build")
+        val buildFolder = sharedModuleFolder.resolve("build/images")
+        buildFolder.mkdirs()
         val androidResFolder = sharedModuleFolder.resolve("src/$androidMainFolder/res")
         val iosBuildFolder = buildFolder.createFolderIfNotExists("ios")
 
@@ -30,7 +31,7 @@ class Generator(
         imagesFolder.listFiles()?.forEach { image ->
             println("Convert ${image.nameWithoutExtension}")
             androidImageConverter.convert(image)
-            iosImageConverter.convertJpg(image)
+//            iosImageConverter.convertJpg(image)
             codeGenerator.addImage(image.nameWithoutExtension)
         }
 
@@ -39,15 +40,15 @@ class Generator(
         val svg2vd = "/usr/local/bin/svg2vd -d ${androidDrawableFolder.path}"
         val output = svg2vd.runCommand(sharedModuleFolder)
         println("Output of svg2vd = $output")
-        imagesFolder.deleteFiles { it.extension.endsWith("svg") }
+        androidDrawableFolder.deleteFiles { it.extension.endsWith("svg") }
 
         // Compile assets catalog
-        val iosOutputFolder = sharedModuleFolder.resolve("src/commonMain/resources/ios")
+        /*val iosOutputFolder = sharedModuleFolder.resolve("src/commonMain/resources/ios")
 
         val xcrun =
             "/usr/bin/xcrun actool ${iosImageConverter.assetsFolder.name} --compile ${iosOutputFolder.path} --platform iphoneos --minimum-deployment-target 10.0"
         val xcrunOutput = xcrun.runCommand(sharedModuleFolder)
-        println("Output of xcrun = $xcrunOutput")
+        println("Output of xcrun = $xcrunOutput")*/
 
         val kotlinSourceFolder = sharedModuleFolder.resolve("src").resolve("commonMain").resolve("kotlin")
 

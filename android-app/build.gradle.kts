@@ -6,6 +6,17 @@ plugins {
     id("dev.jamiecraane.plugins.kmmimages")
 }
 
+println("PROJECT DIR = " + project.projectDir.resolve("../images"))
+kmmImagesConfig {
+    imageFolder.set(project.projectDir.resolve("../images"))
+    sharedModuleFolder.set(project.projectDir)
+    androidSourceFolder.set("main")
+    packageName.set("com.example.project")
+}
+
+val generateImages = tasks["generateImages"]
+tasks["preBuild"].dependsOn(generateImages)
+
 repositories {
     google()
     jcenter()
@@ -25,10 +36,6 @@ kotlin {
                 baseName = "shared"
             }
         }
-    }
-
-    js {
-        browser()
     }
 
     sourceSets {
@@ -101,4 +108,4 @@ val packForXcode by tasks.creating(Sync::class) {
     into(targetDir)
 }
 
-tasks.getByName("build").dependsOn(packForXcode)
+//tasks.getByName("build").dependsOn(packForXcode)

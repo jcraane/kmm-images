@@ -8,16 +8,19 @@ import java.util.concurrent.TimeUnit
  */
 fun String.runCommand(
     workingDir: File = File("."),
-    timeoutAmount: Long = 60,
+    timeoutAmount: Long = 1,
     timeoutUnit: TimeUnit = TimeUnit.SECONDS
-): String? = try {
-    ProcessBuilder(split("\\s".toRegex()))
-        .directory(workingDir)
-        .redirectOutput(ProcessBuilder.Redirect.PIPE)
-        .redirectError(ProcessBuilder.Redirect.PIPE)
-        .start().apply { waitFor(timeoutAmount, timeoutUnit) }
-        .inputStream.bufferedReader().readText()
-} catch (e: java.io.IOException) {
-    e.printStackTrace()
-    null
+): String? {
+    println("Execute command: [$this] in workingDir: [${workingDir.path}]")
+    return try {
+        ProcessBuilder(split("\\s{1,}".toRegex()))
+            .directory(workingDir)
+            .redirectOutput(ProcessBuilder.Redirect.PIPE)
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .start().apply { waitFor(timeoutAmount, timeoutUnit) }
+            .inputStream.bufferedReader().readText()
+    } catch (e: java.io.IOException) {
+        e.printStackTrace()
+        null
+    }
 }
