@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
  */
 fun String.runCommand(
     workingDir: File = File("."),
-    timeoutAmount: Long = 1,
+    timeoutAmount: Long = 10,
     timeoutUnit: TimeUnit = TimeUnit.SECONDS
 ): String? {
     println("Execute command: [$this] in workingDir: [${workingDir.path}]")
