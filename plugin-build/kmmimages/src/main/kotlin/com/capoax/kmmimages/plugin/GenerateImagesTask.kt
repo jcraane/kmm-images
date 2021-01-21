@@ -19,7 +19,11 @@ abstract class GenerateImagesTask : DefaultTask() {
 
     @get:Input
     @get:Option(option = "packageName", description = "The package where the generated source files are placed.")
-    abstract val packageName: Property<File>
+    abstract val packageName: Property<String>
+
+    @get:Input
+    @get:Option(option = "androidSourceFolder", description = "The source folder to generate the localizations class for Android. Defaults to main, but some multiplatform projects use androidMain.")
+    abstract val androidSourceFolder: Property<String>
 
     @TaskAction
     fun generate() {

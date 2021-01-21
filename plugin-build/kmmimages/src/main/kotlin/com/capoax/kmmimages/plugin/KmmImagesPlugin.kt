@@ -9,7 +9,8 @@ class KmmImagesPlugin: Plugin<Project> {
 
         project.tasks.register(GenerateImagesTask.NAME, GenerateImagesTask::class.java) {
             it.imageFolder.set(extension.imageFolder.get())
-            it.packageName.set(extension.imageFolder.get())
+            it.packageName.set(extension.packageName.get())
+            it.androidSourceFolder.set(extension.androidSourceFolder.get())
             it.sharedModuleFolder.set(extension.sharedModuleFolder.get())
         }
     }
