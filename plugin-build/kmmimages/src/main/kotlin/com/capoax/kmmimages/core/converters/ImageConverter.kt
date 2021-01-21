@@ -8,6 +8,7 @@ interface ImageConverter {
     fun convertPng(sourceImage: File)
     fun convertPdf(sourceImage: File)
     fun convertJpg(sourceImage: File)
+    fun convertSvg(sourceImage: File)
 }
 
 fun ImageConverter.convert(sourceImage: File) {
@@ -15,6 +16,7 @@ fun ImageConverter.convert(sourceImage: File) {
         "png" -> convertPng(sourceImage)
         "pdf" -> convertPdf(sourceImage)
         "jpg" -> convertJpg(sourceImage)
+        "svg" -> convertSvg(sourceImage)
         else -> throw ImageConverterError("${sourceImage.extension} not supported (${sourceImage.absolutePath})")
     }
 }

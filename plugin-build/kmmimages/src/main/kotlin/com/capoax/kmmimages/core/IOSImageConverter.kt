@@ -50,12 +50,26 @@ class IOSImageConverter(private val outputFolder: File) : ImageConverter {
         copyImage(sourceImage)
     }
 
+    override fun convertSvg(sourceImage: File) {
+        val imageName = sourceImage.nameWithoutExtension
+        val pdfExtension = ".pdf"
+        val sourceImageFolder = sourceImage.parentFile
+        val outputName = "$imageName$pdfExtension"
+        convertImage(
+            sourceImage = sourceImage,
+            outputFolder = sourceImageFolder,
+            outputName = outputName
+        )
+
+        val convertedPdf = File(sourceImageFolder, outputName)
+        convertPdf(convertedPdf)
+    }
+
     private fun copyImage(sourceImage: File) {
         val imageName = sourceImage.nameWithoutExtension
         val imageSetFolder = outputFolder.resolve("$imageName.imageSet").apply { mkdirs() }
         imageSetFolder.resolve(imageName).delete()
-        sourceImage.copyTo(imageSetFolder)
-
+        sourceImage.copyTo(imageSetFolder, overwrite = true)
     }
 }
 
