@@ -1,5 +1,6 @@
 package com.capoax.kmmimages.plugin
 
+import com.capoax.kmmimages.core.Generator
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -27,7 +28,13 @@ abstract class GenerateImagesTask : DefaultTask() {
 
     @TaskAction
     fun generate() {
-//        todo implement here
+        println("About to generate images for all supported platforms.")
+        Generator(
+            imagesFolder = imageFolder.get(),
+            sharedModuleFolder = sharedModuleFolder.get(),
+            androidMainFolder = androidSourceFolder.get(),
+            packageName = packageName.get()
+        ).generate()
     }
 
     companion object {
