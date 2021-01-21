@@ -45,7 +45,6 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
             val outputFolder = outputFolder.resolve("drawable-$density")
             outputFolder.mkdirs()
 
-//            todo moet hier geen convertImage plaatsvinden>
             val imageOutputFile = File(outputFolder, sourceImage.name)
             sourceImage.copyTo(imageOutputFile, overwrite = true)
         }
