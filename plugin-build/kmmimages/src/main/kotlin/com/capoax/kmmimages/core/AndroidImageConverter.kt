@@ -1,6 +1,7 @@
 package com.capoax.kmmimages.core
 
 import com.capoax.kmmimages.core.converters.ImageConverter
+import com.capoax.kmmimages.core.converters.convertImage
 import java.io.File
 
 class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
@@ -25,7 +26,7 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
             val outputFolder = outputFolder.resolve("drawable-$density")
             val arguments = if (!resize.isEmpty()) listOf("-resize", resize) else emptyList<String>()
 
-//            todo convert image here
+            convertImage(sourceImage, outputFolder, sourceImage.name, arguments)
         }
     }
 
@@ -33,7 +34,7 @@ class AndroidImageConverter(private val outputFolder: File) : ImageConverter {
         val outputFolder = outputFolder.resolve("drawable")
         outputFolder.mkdirs()
         val svgFileName = "${sourceImage.nameWithoutExtension}.svg"
-        //            todo convert image here
+        convertImage(sourceImage, outputFolder, svgFileName)
     }
 
     override fun convertJpg(sourceImage: File) {

@@ -3,7 +3,7 @@ package com.capoax.kmmimages.core
 import com.capoax.kmmimages.extensions.imageNameToConst
 
 data class CodeGenerator(val packageName: String) {
-    var images: List<String> = emptyList()
+    private val images = mutableListOf<String>()
 
     val result: String
         get() {
@@ -20,4 +20,8 @@ data class CodeGenerator(val packageName: String) {
                 append("}\n\n")
             }
         }
+
+    fun addImage(name: String) {
+        images.add(name)
+    }
 }

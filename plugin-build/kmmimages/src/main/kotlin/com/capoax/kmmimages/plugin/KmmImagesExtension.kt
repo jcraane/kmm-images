@@ -8,7 +8,11 @@ import java.io.File
 abstract class KmmImagesExtension @Inject constructor(project: Project) {
     private val objects = project.objects
 
-    val input: Property<File> = objects.property(File::class.java)
+    val imageFolder: Property<File> = objects.property(File::class.java)
+
+    val sharedModuleFolder: Property<File> = objects.property(File::class.java)
+
+    val packageName: Property<String> = objects.property(String::class.java)
 
     companion object {
         const val NAME = "kmmImagesConfig"

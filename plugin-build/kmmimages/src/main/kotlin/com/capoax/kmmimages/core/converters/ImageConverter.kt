@@ -1,5 +1,6 @@
 package com.capoax.kmmimages.core.converters
 
+import com.capoax.kmmimages.extensions.runCommand
 import java.io.File
 import java.lang.RuntimeException
 
@@ -19,3 +20,16 @@ fun ImageConverter.convert(sourceImage: File) {
 }
 
 class ImageConverterError(msg: String) : RuntimeException(msg)
+
+/**
+ * Converts image using https://imagemagick.org/. This could be changed in the future to a Java library if needed.
+ */
+fun convertImage(
+    sourceImage: File,
+    outputFolder: File,
+    outputName: String,
+    arguments: List<String> = emptyList()) {
+    val magick = "/usr/local/bin/magick convert ${sourceImage.path} ${arguments.joinToString(" ")} ${outputFolder.path}$outputName"
+    val magickResult = magick.runCommand()
+    println("Output of magick = $magickResult")
+}
