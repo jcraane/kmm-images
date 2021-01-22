@@ -71,6 +71,8 @@ class IOSImageConverter(
 
         val convertedPdf = File(sourceImageFolder, outputName)
         convertPdf(convertedPdf)
+
+        convertedPdf.delete()
     }
 
     private fun copyImage(sourceImage: File) {
