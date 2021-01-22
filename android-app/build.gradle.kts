@@ -107,6 +107,13 @@ val packForXcode by tasks.creating(Sync::class) {
     val targetDir = findProperty("configuration.build.dir")
     from({ framework.outputDirectory })
     into(targetDir)
+
+    doLast {
+        copy {
+            from("${project.rootDir}/android-app/src/commonMain/resources/ios")
+            into("${targetDir}/shared.framework")
+        }
+    }
 }
 
 //tasks.getByName("build").dependsOn(packForXcode)

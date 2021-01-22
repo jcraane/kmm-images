@@ -10,8 +10,8 @@ struct ContentView: View {
 //        Text(greet())
 //    }
     var body: some View {
-             Image(uiImage: UIImage(named: Images().KEYBOARD.name)!)
-        }
+        Image(uiImage: UIImage(named: Images().KEYBOARD.name)!)
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
