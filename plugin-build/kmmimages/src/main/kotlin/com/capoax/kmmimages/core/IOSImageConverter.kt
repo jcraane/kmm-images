@@ -73,13 +73,13 @@ class IOSImageConverter(
         convertPdf(convertedPdf)
     }
 
-//    todo output folder checken
     private fun copyImage(sourceImage: File) {
         val imageName = sourceImage.nameWithoutExtension
         val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
-        imageSetFolder.resolve(imageName).delete()
-        logger.debug("copy image to $imageSetFolder")
-        sourceImage.copyTo(imageSetFolder, overwrite = true)
+    sourceImage.copyTo(imageSetFolder.resolve(sourceImage.name), overwrite = true)
+        Contents(sourceImage).also {
+            it.writeTo(imageSetFolder)
+        }
     }
 }
 
