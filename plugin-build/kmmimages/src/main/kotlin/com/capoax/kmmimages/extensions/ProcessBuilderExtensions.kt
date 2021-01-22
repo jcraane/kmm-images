@@ -11,7 +11,7 @@ fun String.runCommand(
     timeoutAmount: Long = 10,
     timeoutUnit: TimeUnit = TimeUnit.SECONDS
 ): String? {
-    println("Execute command: [$this] in workingDir: [${workingDir.path}]")
+    println("run: $this")
     return try {
         ProcessBuilder(split("\\s{1,}".toRegex()))
             .directory(workingDir)

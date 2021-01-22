@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import java.io.File
 
 data class Contents(
-    val images: List<Image> = emptyList(),
+    val images: Set<Image> = emptySet(),
     val info: Info = Info()
 ) {
     fun writeTo(outputFolder: File) {
@@ -16,7 +16,7 @@ data class Contents(
 
     companion object {
         operator fun invoke(imageFile: File) = Contents(
-            images = listOf(Image(filename = imageFile.name))
+            images = setOf(Image(filename = imageFile.name))
         )
     }
 }

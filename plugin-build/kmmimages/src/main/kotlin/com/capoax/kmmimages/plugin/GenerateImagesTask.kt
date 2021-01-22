@@ -33,13 +33,15 @@ abstract class GenerateImagesTask : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        println("About to generate images for all supported platforms.")
+        project.logger.debug("About to generate images for all supported platforms.")
+
         Generator(
             imagesFolder = imageFolder.get(),
             sharedModuleFolder = sharedModuleFolder.get(),
             androidMainFolder = androidSourceFolder.get(),
             packageName = packageName.get(),
-            pathToVdTool = pathToVdTool.get()
+            pathToVdTool = pathToVdTool.get(),
+            logger = project.logger
         ).generate()
     }
 

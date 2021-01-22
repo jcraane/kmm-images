@@ -13,10 +13,18 @@ interface ImageConverter {
 
 fun ImageConverter.convert(sourceImage: File) {
     when (sourceImage.extension) {
-        "png" -> convertPng(sourceImage)
-        "pdf" -> convertPdf(sourceImage)
-        "jpg" -> convertJpg(sourceImage)
-        "svg" -> convertSvg(sourceImage)
+        "png" -> {
+            convertPng(sourceImage)
+        }
+        "pdf" -> {
+            convertPdf(sourceImage)
+        }
+        "jpg" -> {
+            convertJpg(sourceImage)
+        }
+        "svg" -> {
+            convertSvg(sourceImage)
+        }
         else -> throw ImageConverterError("${sourceImage.extension} not supported (${sourceImage.absolutePath})")
     }
 }
@@ -33,5 +41,4 @@ fun convertImage(
     arguments: List<String> = emptyList()) {
     val magick = "/usr/local/bin/magick convert ${sourceImage.path} ${arguments.joinToString(" ")} ${outputFolder.path}/$outputName"
     val magickResult = magick.runCommand()
-    println("Output of magick = $magickResult")
 }

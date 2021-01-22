@@ -2,9 +2,12 @@ package com.capoax.kmmimages.core
 
 import com.capoax.kmmimages.core.converters.ImageConverter
 import com.capoax.kmmimages.core.converters.convertImage
+import org.gradle.api.logging.Logger
 import java.io.File
 
-class IOSImageConverter(private val outputFolder: File) : ImageConverter {
+class IOSImageConverter(
+    private val outputFolder: File,
+    private val logger: Logger) : ImageConverter {
 
     val pngConversions = mapOf(
         "75%" to "3x",
@@ -17,16 +20,18 @@ class IOSImageConverter(private val outputFolder: File) : ImageConverter {
     init {
         assetsFolder.deleteRecursively()
         assetsFolder.mkdir()
+        Contents().writeTo(assetsFolder)
     }
 
     override fun convertPng(sourceImage: File) {
+        logger.debug("IOSImageConverter.convertPng: $sourceImage")
         val imageName = sourceImage.nameWithoutExtension
-        val imageSetFolder = outputFolder.resolve("$imageName.imageSet").apply { mkdirs() }
-        val imageList = mutableListOf<Image>()
+        val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
+        val imageList = mutableSetOf<Image>()
         pngConversions.forEach {  resize, scale ->
             val arguments = mutableListOf<String>()
             if (resize.isNotEmpty()) {
-                arguments + listOf("-resize", resize)
+                arguments.addAll(listOf("-resize", resize))
             }
             val scaleName = if (scale.isEmpty()) "" else "@$scale"
             val fileName = "$imageName$scaleName.png"
@@ -43,14 +48,17 @@ class IOSImageConverter(private val outputFolder: File) : ImageConverter {
     }
 
     override fun convertPdf(sourceImage: File) {
+        logger.debug("IOSImageConverter.convertPdf: $sourceImage")
         copyImage(sourceImage)
     }
 
     override fun convertJpg(sourceImage: File) {
+        logger.debug("IOSImageConverter.convertJpg: $sourceImage")
         copyImage(sourceImage)
     }
 
     override fun convertSvg(sourceImage: File) {
+        logger.debug("IOSImageConverter.convertSvg: $sourceImage")
         val imageName = sourceImage.nameWithoutExtension
         val pdfExtension = ".pdf"
         val sourceImageFolder = sourceImage.parentFile
@@ -65,10 +73,12 @@ class IOSImageConverter(private val outputFolder: File) : ImageConverter {
         convertPdf(convertedPdf)
     }
 
+//    todo output folder checken
     private fun copyImage(sourceImage: File) {
         val imageName = sourceImage.nameWithoutExtension
-        val imageSetFolder = outputFolder.resolve("$imageName.imageSet").apply { mkdirs() }
+        val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
         imageSetFolder.resolve(imageName).delete()
+        logger.debug("copy image to $imageSetFolder")
         sourceImage.copyTo(imageSetFolder, overwrite = true)
     }
 }

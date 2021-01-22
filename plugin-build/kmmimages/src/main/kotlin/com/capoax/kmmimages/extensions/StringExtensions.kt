@@ -24,10 +24,3 @@ private fun String.camelCaseToSnakeCase(): String {
     }
     return snakeCase.removePrefix("_").toString()
 }
-
-fun main(args: Array<String>) {
-    println("Hello")
-    println("Hello,-World!".imageNameToConst())
-    println("Hello, World122!".imageNameToConst())
-    println("HelloWorldWatMooi".imageNameToConst())
-}
