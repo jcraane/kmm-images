@@ -116,4 +116,22 @@ val packForXcode by tasks.creating(Sync::class) {
     }
 }
 
+tasks {
+    /**
+     * This sets up dependencies between the plutil task and compileKotlinIos* tasks. This
+     * way common is recompiled if something in generic.yaml changes (so new ios resources
+     * are generated). If the generic.yaml file is not changed, the resources are considered
+     * up to date by Gradle.
+     */
+/*    named("compileKotlinIos32") {
+        dependsOn(plutil)
+    }*/
+    named("compileKotlinIosArm64") {
+        dependsOn(generateImages)
+    }
+    named("compileKotlinIosX64") {
+        dependsOn(generateImages)
+    }
+}
+
 //tasks.getByName("build").dependsOn(packForXcode)
