@@ -6,7 +6,6 @@ plugins {
     id("dev.jamiecraane.plugins.kmmimages")
 }
 
-println("PROJECT DIR = " + project.projectDir.resolve("../images"))
 kmmImagesConfig {
     imageFolder.set(project.projectDir.resolve("../images"))
     sharedModuleFolder.set(project.projectDir)

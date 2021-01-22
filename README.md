@@ -1,18 +1,8 @@
 # KMM Images
 
-Generate images for iOS and Android from a single image source. This will also generate an Images.kt that contains definitions for each image.
+Generate images for iOS and Android from a all supported images in the shared module. This will also generate an Images.kt that contains definitions for each image. kmm-images is a Gradle plugin that is configured in the build file of the shared module.
 
-# Setup
-
-```
-swift package generate-xcodeproj
-```
-
-# Build
-
-```
-swift build -c release
-```
+At the moment it does depend on some external tools for image conversion. These are described below.
 
 # Requirements
 
@@ -49,21 +39,62 @@ vd-tool is a tool used to convert svg to Android vector drawables. This tool is 
 
 Please note this tool is only required if raw svg files are used.
 
-## svg2vd (deprecated, not used anymore, see vd-tool above)
+# Configuration
 
-svg2vd is used to convert svg images to Android xml format
+The following section describes the configuration of the kmm-images plugin in the Gradle build script, starting with an example:
 
-<https://github.com/alexjlockwood/svg2vd>
+```kotlin
+plugins {
+    kotlin("multiplatform")
+    id("com.android.application")
+    id("dev.jamiecraane.plugins.kmmimages")
+}
 
-Installation:
-
+kmmImagesConfig {
+    imageFolder.set(project.projectDir.resolve("../images"))
+    sharedModuleFolder.set(project.projectDir)
+    androidSourceFolder.set("main")
+    packageName.set("com.example.project")
+    pathToVdTool.set("vd-tool")
+}
 ```
-npm install -g svg2vd
+
+The above snippet applies the kmmimages plugin and configures it.
+
+- imageFolder. This is the folder where the images are found which must be converted to Android and iOS. Subfolders are not supported at the moment.
+- sharedModuleFolder. The path to the shared module (kmm). This project.projectDir if the plugin is configured in the shared module (which is typically the case). 
+- androidSourceFolder. The name of the androidSourceFolder.
+- packageName. The package to use for the generated Images class.
+- pathToVdTool. The path to vd-tool. If vd-tool/bin is exported than 'vd-tool' is enough. If not, the full path to vd-tool must be specified. If the full path is needed make sure it is configurable to not dependen on hard-coded paths in the build file (else the build is not portable).
+
+Next, setup the generateImages task and hook it up into the build phase:
+
+```kotlin
+val generateImages = tasks["generateImages"]
+tasks["preBuild"].dependsOn(generateImages)
+
+tasks {
+    named("compileKotlinIosArm64") {
+        dependsOn(generateImages)
+    }
+    named("compileKotlinIosX64") {
+        dependsOn(generateImages)
+    }
+}
 ```
 
-# Run
+Make sure the resources are copied into the framework by adding the following to the packForXCode task (see also the build.gradle.kts file in android-app module):
 
-todo
+```kotlin
+doLast {
+        copy {
+            from("${project.rootDir}/android-app/src/commonMain/resources/ios")
+            into("${targetDir}/shared.framework")
+        }
+    }
+```
+
+Run the application and you are good to go!
 
 # Supported images
 
