@@ -11,7 +11,6 @@ fun String.runCommand(
     timeoutAmount: Long = 10,
     timeoutUnit: TimeUnit = TimeUnit.SECONDS
 ): String? {
-    println("run: $this")
     return try {
         ProcessBuilder(split("\\s{1,}".toRegex()))
             .directory(workingDir)
