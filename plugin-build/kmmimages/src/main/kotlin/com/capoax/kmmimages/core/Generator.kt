@@ -31,11 +31,13 @@ class Generator(
         val iosImageConverter = IOSImageConverter(iosBuildFolder, logger)
         val codeGenerator = CodeGenerator(packageName)
 
-        imagesFolder.listFiles()?.forEach { image ->
-            androidImageConverter.convert(image)
-            iosImageConverter.convert(image)
-            codeGenerator.addImage(image.nameWithoutExtension)
-        }
+        imagesFolder
+            .listFiles(FileFilter { supportedFormats.contains(it.extension) })
+            ?.forEach { image ->
+                androidImageConverter.convert(image)
+                iosImageConverter.convert(image)
+                codeGenerator.addImage(image.nameWithoutExtension)
+            }
 
         // Convert svg
         val androidDrawableFolder = androidResFolder.createFolderIfNotExists("drawable")
@@ -61,5 +63,9 @@ class Generator(
         packageFolder.mkdirs()
         val imagesFile = packageFolder.resolve("Images.kt")
         imagesFile.writeText(codeGenerator.result)
+    }
+
+    companion object {
+        private val supportedFormats = listOf("svg", "pdf", "png", "jpg", "jpeg")
     }
 }
