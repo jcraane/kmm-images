@@ -34,8 +34,8 @@ vd-tool is a tool used to convert svg to Android vector drawables. This tool is 
 
 - Download the vd-tool.zip file
 - Extract the contents of the zip file to a folder of choice
-- Configure the plugin with the path to vd-tool. The recommended way is to add vd-tool/bin to your path so the only configuration needed is the following: pathToVdTool.set("vd-tool")
 - Restart the IDE or terminal to make sure the path settings are taken into account.
+- Configure the plugin with the path to <EXTRACTED_CONTENTS>/vd-tool/bin. The recommended way is to add vd-tool/bin to your path so the only configuration needed is the following: pathToVdTool.set("vd-tool")
 
 Please note this tool is only required if raw svg files are used.
 
