@@ -33,20 +33,14 @@ class Generator(
 
         imagesFolder
             .listFiles(FileFilter { supportedFormats.contains(it.extension) })
+            ?.toList()
             ?.forEach { image ->
                 androidImageConverter.convert(image)
                 iosImageConverter.convert(image)
                 codeGenerator.addImage(image.nameWithoutExtension)
             }
 
-        // Convert svg
-        val androidDrawableFolder = androidResFolder.createFolderIfNotExists("drawable")
-        logger.debug("Run vd-tool")
-        val vdTool = "$pathToVdTool -c -in ${androidDrawableFolder.path} -out ${androidDrawableFolder.path}"
-        val vdToolOutput = vdTool.runCommand(sharedModuleFolder)
-        logger.debug("Output of vd-tool = $vdToolOutput")
-
-        androidDrawableFolder.deleteFiles { it.extension.endsWith("svg") }
+        convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder)
 
         // Compile assets catalog
         val iosOutputFolder = sharedModuleFolder.resolve("src/commonMain/resources/ios")
@@ -65,7 +59,23 @@ class Generator(
         imagesFile.writeText(codeGenerator.result)
     }
 
+    private fun convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder: File) {
+        val androidDrawableFolder = androidResFolder.createFolderIfNotExists("drawable")
+        val containsSvg = androidDrawableFolder.listFiles(FileFilter { it.extension.endsWith(SVG) })
+            ?.toList()
+            ?.isNotEmpty() == true
+
+        if (containsSvg) {
+            logger.debug("Run vd-tool")
+            val vdTool = "$pathToVdTool -c -in ${androidDrawableFolder.path} -out ${androidDrawableFolder.path}"
+            val vdToolOutput = vdTool.runCommand(sharedModuleFolder)
+            logger.debug("Output of vd-tool = $vdToolOutput")
+            androidDrawableFolder.deleteFiles { it.extension.endsWith(SVG) }
+        }
+    }
+
     companion object {
-        private val supportedFormats = listOf("svg", "pdf", "png", "jpg", "jpeg")
+        private const val SVG = "svg"
+        private val supportedFormats = listOf(SVG, "pdf", "png", "jpg", "jpeg")
     }
 }
