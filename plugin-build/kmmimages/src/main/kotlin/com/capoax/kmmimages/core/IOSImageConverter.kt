@@ -49,7 +49,7 @@ class IOSImageConverter(
 
     override fun convertPdf(sourceImage: File) {
         logger.debug("IOSImageConverter.convertPdf: $sourceImage")
-        copyImage(sourceImage)
+        copyImage(sourceImage, Properties(preservesVectorRepresentation = true))
     }
 
     override fun convertJpg(sourceImage: File) {
@@ -75,11 +75,11 @@ class IOSImageConverter(
         convertedPdf.delete()
     }
 
-    private fun copyImage(sourceImage: File) {
+    private fun copyImage(sourceImage: File, properties: Properties? = null) {
         val imageName = sourceImage.nameWithoutExtension
         val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
-    sourceImage.copyTo(imageSetFolder.resolve(sourceImage.name), overwrite = true)
-        Contents(sourceImage).also {
+        sourceImage.copyTo(imageSetFolder.resolve(sourceImage.name), overwrite = true)
+        Contents(sourceImage, properties).also {
             it.writeTo(imageSetFolder)
         }
     }
