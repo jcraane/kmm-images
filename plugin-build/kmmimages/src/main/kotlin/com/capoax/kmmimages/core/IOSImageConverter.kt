@@ -47,7 +47,7 @@ class IOSImageConverter(
         contents.writeTo(imageSetFolder)
     }
 
-    override fun convertPdf(sourceImage: File) {
+    override fun convertPdf(sourceImage: File, usePdf2SvgTool: Boolean) {
         logger.debug("IOSImageConverter.convertPdf: $sourceImage")
         copyImage(sourceImage, Properties(preservesVectorRepresentation = true))
     }
@@ -70,7 +70,7 @@ class IOSImageConverter(
         )
 
         val convertedPdf = File(sourceImageFolder, outputName)
-        convertPdf(convertedPdf)
+        convertPdf(convertedPdf, usePdf2SvgTool = false)
 
         convertedPdf.delete()
     }

@@ -10,7 +10,7 @@ Running the CommonImages depends on a couple of command line tools which must be
 
 ## Image Magick
 
-Image Magick is used for all image conversions and itself uses ghostscript and potrace.
+Image Magick is used for all image conversions (except pdf to svg) and itself uses ghostscript and potrace.
 
 <https://imagemagick.org>
 
@@ -28,6 +28,14 @@ brew install ghostscript
 brew install potrace
 ```
 
+## pdf2svg
+
+pdf2svg is used for the image conversion from pdf to svg. [https://formulae.brew.sh/formula/pdf2svg] and [http://cityinthesky.co.uk/opensource/pdf2svg/]
+
+```
+brew install pdf2svg
+```
+
 ## vd-tool
 
 vd-tool is a tool used to convert svg to Android vector drawables. This tool is a pre-requisite if sgv files are used. See https://www.androiddesignpatterns.com/2018/11/android-studio-svg-to-vector-cli.html for more information. To setup vd-tool do the following:
@@ -41,13 +49,15 @@ Please note this tool is only required if raw svg files are used.
 
 # Configuration
 
+The KMMResources plugin is published via the Gradle plugin portal and can be found here: https://plugins.gradle.org/plugin/dev.jamiecraane.plugins.kmmimages
+
 The following section describes the configuration of the kmm-images plugin in the Gradle build script, starting with an example:
 
 ```kotlin
 plugins {
     kotlin("multiplatform")
     id("com.android.application")
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha02"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha04"
 }
 
 kmmImagesConfig {

@@ -35,12 +35,16 @@ class AndroidImageConverter(
         }
     }
 
-    override fun convertPdf(sourceImage: File) {
+    override fun convertPdf(sourceImage: File, usePdf2SvgTool: Boolean) {
         logger.debug("AndroidImageConvert.convertPdf: convert $sourceImage")
         val outputFolder = outputFolder.resolve("drawable")
         outputFolder.mkdirs()
         val svgFileName = "${sourceImage.nameWithoutExtension}.svg"
-        convertImagePdfToSvg(sourceImage, outputFolder, svgFileName)
+        if (usePdf2SvgTool) {
+            convertImagePdfToSvg(sourceImage, outputFolder, svgFileName)
+        } else {
+            convertImage(sourceImage, outputFolder, svgFileName)
+        }
     }
 
     override fun convertJpg(sourceImage: File) {

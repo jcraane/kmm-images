@@ -19,7 +19,8 @@ class Generator(
     val androidMainFolder: String,
     val packageName: String,
     val pathToVdTool: String,
-    val logger: Logger
+    val logger: Logger,
+    val usePdf2SvgTool: Boolean
 ) {
     fun generate() {
         val buildFolder = sharedModuleFolder.resolve("build/images")
@@ -35,8 +36,8 @@ class Generator(
             .listFiles(FileFilter { supportedFormats.contains(it.extension) })
             ?.toList()
             ?.forEach { image ->
-                androidImageConverter.convert(image)
-                iosImageConverter.convert(image)
+                androidImageConverter.convert(image, usePdf2SvgTool)
+                iosImageConverter.convert(image, usePdf2SvgTool)
                 codeGenerator.addImage(image.nameWithoutExtension)
             }
 

@@ -4,11 +4,9 @@ data class Image(val name: String)
 object Images {
 	val ICON: Image = Image("icon")
 	val PIANO: Image = Image("piano")
-	val NL: Image = Image("nl")
 	val KEYBOARD: Image = Image("keyboard")
 	val IC_ARROW_RIGHT: Image = Image("ic_arrow_right")
 	val PNG_ICON: Image = Image("png_icon")
 	val NL_FLAG: Image = Image("nl_flag")
-	val FLAG_NL: Image = Image("flag_nl")
 }
 

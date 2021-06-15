@@ -6,18 +6,18 @@ import java.lang.RuntimeException
 
 interface ImageConverter {
     fun convertPng(sourceImage: File)
-    fun convertPdf(sourceImage: File)
+    fun convertPdf(sourceImage: File, usePdf2SvgTool: Boolean)
     fun convertJpg(sourceImage: File)
     fun convertSvg(sourceImage: File)
 }
 
-fun ImageConverter.convert(sourceImage: File) {
+fun ImageConverter.convert(sourceImage: File, usePdf2SvgTool: Boolean) {
     when (sourceImage.extension) {
         "png" -> {
             convertPng(sourceImage)
         }
         "pdf" -> {
-            convertPdf(sourceImage)
+            convertPdf(sourceImage, usePdf2SvgTool)
         }
         "jpg" -> {
             convertJpg(sourceImage)
