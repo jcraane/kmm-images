@@ -42,3 +42,16 @@ fun convertImage(
     val magick = "/usr/local/bin/magick convert ${sourceImage.path} ${arguments.joinToString(" ")} ${outputFolder.path}/$outputName"
     val magickResult = magick.runCommand()
 }
+
+/**
+ * Converts the sourceImage (pdf) to an svg using pdf2svg.
+ */
+fun convertImagePdfToSvg(
+    sourceImage: File,
+    outputFolder: File,
+    outputName: String) {
+    val pdf2svg = "pdf2svg ${sourceImage.path} ${outputFolder.path}/$outputName"
+    val pdf2svgResult = pdf2svg.runCommand()
+}
+
+

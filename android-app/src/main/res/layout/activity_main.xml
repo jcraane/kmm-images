@@ -33,4 +33,10 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_right"/>
 
+    <ImageView
+            android:id="@+id/image2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nl_flag"/>
+
 </LinearLayout>

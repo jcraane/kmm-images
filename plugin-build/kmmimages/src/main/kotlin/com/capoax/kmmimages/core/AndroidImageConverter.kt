@@ -2,6 +2,7 @@ package com.capoax.kmmimages.core
 
 import com.capoax.kmmimages.core.converters.ImageConverter
 import com.capoax.kmmimages.core.converters.convertImage
+import com.capoax.kmmimages.core.converters.convertImagePdfToSvg
 import org.gradle.api.logging.Logger
 import java.io.File
 
@@ -39,7 +40,7 @@ class AndroidImageConverter(
         val outputFolder = outputFolder.resolve("drawable")
         outputFolder.mkdirs()
         val svgFileName = "${sourceImage.nameWithoutExtension}.svg"
-        convertImage(sourceImage, outputFolder, svgFileName)
+        convertImagePdfToSvg(sourceImage, outputFolder, svgFileName)
     }
 
     override fun convertJpg(sourceImage: File) {
