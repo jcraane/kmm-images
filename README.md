@@ -49,6 +49,8 @@ Please note this tool is only required if raw svg files are used.
 
 # Configuration
 
+### Using the plugin via Gradle Plugin Portal
+
 The KMMResources plugin is published via the Gradle plugin portal and can be found here: https://plugins.gradle.org/plugin/dev.jamiecraane.plugins.kmmimages
 
 The following section describes the configuration of the kmm-images plugin in the Gradle build script, starting with an example:
@@ -93,7 +95,7 @@ tasks {
 }
 ```
 
-Make sure the resources are copied into the framework by adding the following to the packForXCode task (see also the build.gradle.kts file in android-app module):
+Make sure the resources are copied into the framework by adding the following to the pac    kForXCode task (see also the build.gradle.kts file in android-app module):
 
 ```kotlin
 doLast {
@@ -102,6 +104,34 @@ doLast {
             into("${targetDir}/shared.framework")
         }
     }
+```
+
+### Deploy and include plugin locally
+
+When developing this plugin (or when forking this plugin and adding code to it) you may want to test this plugin in a project not included in this composite build. To do this do the following:
+
+Navigate to the plugin-build folder and execute ```./gradlew :kmmresources:publishToMavenLocal```. This task publishes to the local maven repository.The local Maven repository stores build artefacts used by Maven and Gradle and can be found at ~/.m2/repository
+
+Navigate to the ~/.m2/repository/dev/jamiecraane/plugins/kmmimages to see the published plugins.
+
+In the project in which the plugin must be integrated do the following:
+
+1. In settings.gradle.kts make sure the mavenLocal() repo is present in the pluginManagement section:
+
+```kotlin
+pluginManagement {
+    repositories {
+        mavenLocal()
+    }
+}
+```
+
+Apply the plugin:
+
+```kotlin
+plugins {
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha04"
+}
 ```
 
 Run the application and you are good to go!

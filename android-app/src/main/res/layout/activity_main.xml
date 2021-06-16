@@ -37,6 +37,6 @@
             android:id="@+id/image2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/nl_flag"/>
+            android:src="@drawable/flag_nl"/>
 
 </LinearLayout>
