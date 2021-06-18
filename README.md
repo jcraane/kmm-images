@@ -169,3 +169,8 @@ JPG files (which should be used for photos) are not converted and have a fixed d
 - Images.kt: `[project folder]/common/src/commonMain/[path to package]/Images.kt`
 - iOS Images: compiled Assets catalog in `[project folder]/common/src/commonMain/resources/ios/Assets.car`
 - Android Images: `[project folder]/common/src/main/res/drawable*`
+
+# Known issues
+
+## Too complex PDF
+Some PDF's are complex which results in a use svg file. This sometimes can lead in Android to a STRING_TOO_LARGE error on that specific vector drawable. If this is the case, try reducing the complexity of the PDF.

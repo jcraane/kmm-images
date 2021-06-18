@@ -3,11 +3,13 @@ package com.capoax.kmmimages.core
 import com.capoax.kmmimages.core.converters.ImageConverter
 import com.capoax.kmmimages.core.converters.convertImage
 import com.capoax.kmmimages.core.converters.convertImagePdfToSvg
+import com.capoax.kmmimages.core.resolvers.AndroidPathResolver
 import org.gradle.api.logging.Logger
 import java.io.File
 
 class AndroidImageConverter(
-    private val outputFolder: File,
+    private val androidResFolder: File,
+    private val androidPathResolver: AndroidPathResolver,
     private val logger: Logger) : ImageConverter {
     val pngConversions = mapOf(
         "" to "xxxhdpi",
@@ -19,7 +21,7 @@ class AndroidImageConverter(
 
     init {
         pngConversions.forEach { resize, density ->
-            val outputFolder = outputFolder.resolve("drawable-$density")
+            val outputFolder = androidResFolder.resolve("drawable-$density")
             outputFolder.deleteRecursively()
             outputFolder.mkdirs()
         }
@@ -28,7 +30,7 @@ class AndroidImageConverter(
     override fun convertPng(sourceImage: File) {
         logger.debug("AndroidImageConvert.convertPng: convert $sourceImage")
         pngConversions.forEach { resize, density ->
-            val outputFolder = outputFolder.resolve("drawable-$density")
+            val outputFolder = androidResFolder.resolve("drawable-$density")
             val arguments = if (!resize.isEmpty()) listOf("-resize", resize) else emptyList<String>()
 
             convertImage(sourceImage, outputFolder, sourceImage.name, arguments)
@@ -37,7 +39,7 @@ class AndroidImageConverter(
 
     override fun convertPdf(sourceImage: File, usePdf2SvgTool: Boolean) {
         logger.debug("AndroidImageConvert.convertPdf: convert $sourceImage")
-        val outputFolder = outputFolder.resolve("drawable")
+        val outputFolder = androidPathResolver.getSvgBuildFolder()
         outputFolder.mkdirs()
         val svgFileName = "${sourceImage.nameWithoutExtension}.svg"
         if (usePdf2SvgTool) {
@@ -50,7 +52,7 @@ class AndroidImageConverter(
     override fun convertJpg(sourceImage: File) {
         logger.debug("AndroidImageConvert.convertJpg: convert $sourceImage")
         pngConversions.forEach { resize, density ->
-            val outputFolder = outputFolder.resolve("drawable-$density")
+            val outputFolder = androidResFolder.resolve("drawable-$density")
             outputFolder.mkdirs()
 
             val imageOutputFile = File(outputFolder, sourceImage.name)
@@ -60,7 +62,7 @@ class AndroidImageConverter(
 
     override fun convertSvg(sourceImage: File) {
         logger.debug("AndroidImageConvert.convertSvg: convert $sourceImage")
-        val destination = outputFolder.resolve("drawable")
+        val destination = androidResFolder.resolve("drawable")
         destination.mkdirs()
         sourceImage.copyTo(destination.resolve(sourceImage.name), overwrite = true)
     }

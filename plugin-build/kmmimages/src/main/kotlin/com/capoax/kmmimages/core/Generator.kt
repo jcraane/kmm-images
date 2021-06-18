@@ -1,6 +1,7 @@
 package com.capoax.kmmimages.core
 
 import com.capoax.kmmimages.core.converters.convert
+import com.capoax.kmmimages.core.resolvers.AndroidPathResolver
 import com.capoax.kmmimages.extensions.createFolderIfNotExists
 import com.capoax.kmmimages.extensions.deleteFiles
 import com.capoax.kmmimages.extensions.runCommand
@@ -27,8 +28,10 @@ class Generator(
         buildFolder.mkdirs()
         val androidResFolder = sharedModuleFolder.resolve("src/$androidMainFolder/res")
         val iosBuildFolder = buildFolder.createFolderIfNotExists("ios")
+        val androidBuildFolder = buildFolder.createFolderIfNotExists("android")
+        val androidPathResolver = AndroidPathResolver(androidBuildFolder)
 
-        val androidImageConverter = AndroidImageConverter(androidResFolder, logger)
+        val androidImageConverter = AndroidImageConverter(androidResFolder, androidPathResolver, logger)
         val iosImageConverter = IOSImageConverter(iosBuildFolder, logger)
         val codeGenerator = CodeGenerator(packageName)
 
@@ -41,7 +44,7 @@ class Generator(
                 codeGenerator.addImage(image.nameWithoutExtension)
             }
 
-        convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder)
+        convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder, androidPathResolver)
 
         // Compile assets catalog
         val iosOutputFolder = sharedModuleFolder.resolve("src/commonMain/resources/ios")
@@ -60,9 +63,9 @@ class Generator(
         imagesFile.writeText(codeGenerator.result)
     }
 
-    private fun convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder: File) {
+    private fun convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder: File, androidPathResolver: AndroidPathResolver) {
         val androidDrawableFolder = androidResFolder.createFolderIfNotExists("drawable")
-        val containsSvg = androidDrawableFolder.listFiles(FileFilter { it.extension.endsWith(SVG) })
+        val containsSvg = androidPathResolver.getSvgBuildFolder().listFiles(FileFilter { it.extension.endsWith(SVG) })
             ?.toList()
             ?.isNotEmpty() == true
 
@@ -71,7 +74,6 @@ class Generator(
             val vdTool = "$pathToVdTool -c -in ${androidDrawableFolder.path} -out ${androidDrawableFolder.path}"
             val vdToolOutput = vdTool.runCommand(sharedModuleFolder)
             logger.debug("Output of vd-tool = $vdToolOutput")
-            androidDrawableFolder.deleteFiles { it.extension.endsWith(SVG) }
         }
     }
 
