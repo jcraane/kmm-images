@@ -68,6 +68,7 @@ kmmImagesConfig {
     androidSourceFolder.set("main")
     packageName.set("com.example.project")
     pathToVdTool.set("vd-tool")
+    usePdf2SvgTool.set(true) // optional parameter
 }
 ```
 
@@ -78,6 +79,7 @@ The above snippet applies the kmmimages plugin and configures it.
 - androidSourceFolder. The name of the androidSourceFolder.
 - packageName. The package to use for the generated Images class.
 - pathToVdTool. The path to vd-tool. If vd-tool/bin is exported than 'vd-tool' is enough. If not, the full path to vd-tool must be specified. If the full path is needed make sure it is configurable to not dependen on hard-coded paths in the build file (else the build is not portable).
+- usePdf2SvgTool. When true, uses the pdf2svg tool to convert pdf's to svg. Sometimes this yield better results than imagemagick.
 
 Next, setup the generateImages task and hook it up into the build phase:
 
