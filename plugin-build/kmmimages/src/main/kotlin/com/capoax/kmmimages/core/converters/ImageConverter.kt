@@ -2,7 +2,6 @@ package com.capoax.kmmimages.core.converters
 
 import com.capoax.kmmimages.extensions.ProcessBuilderExtensions
 import java.io.File
-import java.lang.RuntimeException
 
 interface ImageConverter {
     fun convertPng(sourceImage: File)

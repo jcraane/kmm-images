@@ -5,11 +5,10 @@ import com.capoax.kmmimages.core.converters.ImageConverter
 import com.capoax.kmmimages.core.resolvers.AndroidPathResolver
 import com.capoax.kmmimages.extensions.FileExtensions
 import com.capoax.kmmimages.extensions.ProcessBuilderExtensions
-import com.capoax.kmmimages.extensions.StringExtensions
-import java.io.File
-import java.io.FileFilter
 import org.gradle.api.logging.Logger
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileFilter
 import java.io.PrintWriter
 
 /**

@@ -1,7 +1,5 @@
 package com.capoax.kmmimages.extensions
 
-import java.io.ByteArrayInputStream
-
 object StringExtensions {
     fun imageNameToConst(value: String) =
         camelCaseToSnakeCase(value)
