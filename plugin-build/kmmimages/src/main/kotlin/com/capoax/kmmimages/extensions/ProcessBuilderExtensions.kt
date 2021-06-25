@@ -5,7 +5,12 @@ import java.util.concurrent.TimeUnit
 
 object ProcessBuilderExtensions {
     /**
-     * Runs a shell command
+     * Runs a shell command.
+     *
+     * @param command The command to run.
+     * @param workingDir The working directory to run the command in, defaults the current working directory.
+     * @param timeoutAmount The timeout for the command, defaults to 10.
+     * @param timeoutUnit The time unit for the timeout, defaults to seconds.
      */
     fun runCommand(
         command: String,

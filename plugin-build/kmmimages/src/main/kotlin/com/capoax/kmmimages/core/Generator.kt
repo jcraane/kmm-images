@@ -14,7 +14,10 @@ import java.io.PrintWriter
 /**
  * @property imagesFolder The folder where the input images are located.
  * @property sharedModuleFolder Folder of the shared module.
+ * @property androidMainFolder Android main source code folder.
  * @property packageName Packagename and location of the generated classes.
+ * @property logger The logger used for outputting log messages.
+ * @property usePdf2SvgTool When true, uses pdf2svg for converting pdf's to svg's instead of imagemagick.
  */
 class Generator(
     val imagesFolder: File,
@@ -64,7 +67,6 @@ class Generator(
         imagesFile.writeText(codeGenerator.result)
     }
 
-    //    todo replace with inline code (svg2vector)
     private fun convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder: File, androidPathResolver: AndroidPathResolver) {
         val androidDrawableFolder = FileExtensions.createFolderIfNotExists(androidResFolder, "drawable")
         val svgFolder = androidPathResolver.getSvgBuildFolder()
@@ -80,6 +82,8 @@ class Generator(
                 val vectorDrawableName = "${svg.nameWithoutExtension}.xml"
                 val outputFile = File(androidDrawableFolder, vectorDrawableName)
                 val error = Svg2Vector.parseSvgToXml(svg, baos)
+
+                // An error does not mean necessarily that the image could not be parsed. Generate it anyway
                 if (error.isNotEmpty()) {
                     logger.error("An error occurred processing $svg, error = [$error]")
                 }

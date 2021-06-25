@@ -1,6 +1,6 @@
 package com.capoax.kmmimages.core
 
-import com.capoax.kmmimages.extensions.imageNameToConst
+import com.capoax.kmmimages.extensions.StringExtensions
 
 data class CodeGenerator(val packageName: String) {
     private val images = mutableSetOf<String>()
@@ -14,7 +14,7 @@ data class CodeGenerator(val packageName: String) {
 
                 append("object Images {\n")
                 images.map { image ->
-                    "\tval ${image.imageNameToConst()}: Image = Image(\"$image\")"
+                    "\tval ${StringExtensions.imageNameToConst(image)}: Image = Image(\"$image\")"
                 }.forEach { line ->
                     append(line)
                     append("\n")
