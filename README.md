@@ -47,7 +47,7 @@ The following section describes the configuration of the kmm-images plugin in th
 plugins {
     kotlin("multiplatform")
     id("com.android.application")
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha05"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha06"
 }
 
 kmmImagesConfig {
@@ -118,7 +118,7 @@ Apply the plugin:
 
 ```kotlin
 plugins {
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha05"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha06"
 }
 ```
 
