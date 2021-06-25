@@ -63,15 +63,18 @@ class Generator(
         imagesFile.writeText(codeGenerator.result)
     }
 
+    //    todo replace with inline code (svg2vector)
     private fun convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder: File, androidPathResolver: AndroidPathResolver) {
         val androidDrawableFolder = androidResFolder.createFolderIfNotExists("drawable")
-        val containsSvg = androidPathResolver.getSvgBuildFolder().listFiles(FileFilter { it.extension.endsWith(SVG) })
+        val svgFolder = androidPathResolver.getSvgBuildFolder()
+        val containsSvg = svgFolder.listFiles(FileFilter { it.extension.endsWith(SVG) })
             ?.toList()
             ?.isNotEmpty() == true
 
+        println("containsSvg = $containsSvg")
         if (containsSvg) {
             logger.debug("Run vd-tool")
-            val vdTool = "$pathToVdTool -c -in ${androidDrawableFolder.path} -out ${androidDrawableFolder.path}"
+            val vdTool = "$pathToVdTool -c -in ${svgFolder.path} -out ${androidDrawableFolder.path}"
             val vdToolOutput = vdTool.runCommand(sharedModuleFolder)
             logger.debug("Output of vd-tool = $vdToolOutput")
         }
