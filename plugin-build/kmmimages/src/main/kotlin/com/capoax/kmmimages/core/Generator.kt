@@ -1,13 +1,16 @@
 package com.capoax.kmmimages.core
 
-import com.capoax.kmmimages.core.converters.convert
+import com.android.ide.common.vectordrawable.Svg2Vector
+import com.capoax.kmmimages.core.converters.ImageConverter
 import com.capoax.kmmimages.core.resolvers.AndroidPathResolver
-import com.capoax.kmmimages.extensions.createFolderIfNotExists
-import com.capoax.kmmimages.extensions.deleteFiles
-import com.capoax.kmmimages.extensions.runCommand
+import com.capoax.kmmimages.extensions.FileExtensions
+import com.capoax.kmmimages.extensions.ProcessBuilderExtensions
+import com.capoax.kmmimages.extensions.StringExtensions
 import java.io.File
 import java.io.FileFilter
 import org.gradle.api.logging.Logger
+import java.io.ByteArrayOutputStream
+import java.io.PrintWriter
 
 /**
  * @property imagesFolder The folder where the input images are located.
@@ -27,8 +30,8 @@ class Generator(
         val buildFolder = sharedModuleFolder.resolve("build/images")
         buildFolder.mkdirs()
         val androidResFolder = sharedModuleFolder.resolve("src/$androidMainFolder/res")
-        val iosBuildFolder = buildFolder.createFolderIfNotExists("ios")
-        val androidBuildFolder = buildFolder.createFolderIfNotExists("android")
+        val iosBuildFolder = FileExtensions.createFolderIfNotExists(buildFolder, "ios")
+        val androidBuildFolder = FileExtensions.createFolderIfNotExists(buildFolder, "android")
         val androidPathResolver = AndroidPathResolver(androidBuildFolder)
 
         val androidImageConverter = AndroidImageConverter(androidResFolder, androidPathResolver, logger)
@@ -39,8 +42,8 @@ class Generator(
             .listFiles(FileFilter { supportedFormats.contains(it.extension) })
             ?.toList()
             ?.forEach { image ->
-                androidImageConverter.convert(image, usePdf2SvgTool)
-                iosImageConverter.convert(image, usePdf2SvgTool)
+                ImageConverter.convert(androidImageConverter, image, usePdf2SvgTool)
+                ImageConverter.convert(iosImageConverter, image, usePdf2SvgTool)
                 codeGenerator.addImage(image.nameWithoutExtension)
             }
 
@@ -52,7 +55,7 @@ class Generator(
         iosOutputFolder.mkdirs()
         val xcrun =
             "/usr/bin/xcrun actool ${iosImageConverter.assetsFolder.path} --compile ${iosOutputFolder.path} --platform iphoneos --minimum-deployment-target 10.0"
-        val xcrunOutput = xcrun.runCommand(sharedModuleFolder)
+        val xcrunOutput = ProcessBuilderExtensions.runCommand(xcrun, sharedModuleFolder)
         logger.debug("Output of xcrun = $xcrunOutput")
 
         val kotlinSourceFolder = sharedModuleFolder.resolve("src").resolve("commonMain").resolve("kotlin")
@@ -65,18 +68,30 @@ class Generator(
 
     //    todo replace with inline code (svg2vector)
     private fun convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder: File, androidPathResolver: AndroidPathResolver) {
-        val androidDrawableFolder = androidResFolder.createFolderIfNotExists("drawable")
+        val androidDrawableFolder = FileExtensions.createFolderIfNotExists(androidResFolder, "drawable")
         val svgFolder = androidPathResolver.getSvgBuildFolder()
         val containsSvg = svgFolder.listFiles(FileFilter { it.extension.endsWith(SVG) })
             ?.toList()
             ?.isNotEmpty() == true
 
-        println("containsSvg = $containsSvg")
         if (containsSvg) {
-            logger.debug("Run vd-tool")
-            val vdTool = "$pathToVdTool -c -in ${svgFolder.path} -out ${androidDrawableFolder.path}"
-            val vdToolOutput = vdTool.runCommand(sharedModuleFolder)
-            logger.debug("Output of vd-tool = $vdToolOutput")
+            logger.debug("Convert svg's to Android vector drawables")
+            svgFolder.listFiles().forEach { svg ->
+                logger.debug("Convert $svg")
+                val baos = ByteArrayOutputStream()
+                val vectorDrawableName = "${svg.nameWithoutExtension}.xml"
+                val outputFile = File(androidDrawableFolder, vectorDrawableName)
+                val error = Svg2Vector.parseSvgToXml(svg, baos)
+                if (error.isNotEmpty()) {
+                    logger.error("An error occurred processing $svg, error = [$error]")
+                }
+
+                val vectorXmlContent = baos.toString()
+                PrintWriter(outputFile).also { writer ->
+                    writer.write(vectorXmlContent)
+                    writer.flush()
+                }
+            }
         }
     }
 

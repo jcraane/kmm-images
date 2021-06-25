@@ -1,6 +1,6 @@
 package com.capoax.kmmimages.core.converters
 
-import com.capoax.kmmimages.extensions.runCommand
+import com.capoax.kmmimages.extensions.ProcessBuilderExtensions
 import java.io.File
 import java.lang.RuntimeException
 
@@ -9,23 +9,25 @@ interface ImageConverter {
     fun convertPdf(sourceImage: File, usePdf2SvgTool: Boolean)
     fun convertJpg(sourceImage: File)
     fun convertSvg(sourceImage: File)
-}
 
-fun ImageConverter.convert(sourceImage: File, usePdf2SvgTool: Boolean) {
-    when (sourceImage.extension) {
-        "png" -> {
-            convertPng(sourceImage)
+    companion object {
+        fun convert(imageConverter: ImageConverter, sourceImage: File, usePdf2SvgTool: Boolean) {
+            when (sourceImage.extension) {
+                "png" -> {
+                    imageConverter.convertPng(sourceImage)
+                }
+                "pdf" -> {
+                    imageConverter.convertPdf(sourceImage, usePdf2SvgTool)
+                }
+                "jpg" -> {
+                    imageConverter.convertJpg(sourceImage)
+                }
+                "svg" -> {
+                    imageConverter.convertSvg(sourceImage)
+                }
+                else -> throw ImageConverterError("${sourceImage.extension} not supported (${sourceImage.absolutePath})")
+            }
         }
-        "pdf" -> {
-            convertPdf(sourceImage, usePdf2SvgTool)
-        }
-        "jpg" -> {
-            convertJpg(sourceImage)
-        }
-        "svg" -> {
-            convertSvg(sourceImage)
-        }
-        else -> throw ImageConverterError("${sourceImage.extension} not supported (${sourceImage.absolutePath})")
     }
 }
 
@@ -40,7 +42,7 @@ fun convertImage(
     outputName: String,
     arguments: List<String> = emptyList()) {
     val magick = "/usr/local/bin/magick convert ${sourceImage.path} ${arguments.joinToString(" ")} ${outputFolder.path}/$outputName"
-    val magickResult = magick.runCommand()
+    val magickResult = ProcessBuilderExtensions.runCommand(magick)
 }
 
 /**
@@ -51,7 +53,7 @@ fun convertImagePdfToSvg(
     outputFolder: File,
     outputName: String) {
     val pdf2svg = "pdf2svg ${sourceImage.path} ${outputFolder.path}/$outputName"
-    val pdf2svgResult = pdf2svg.runCommand()
+    val pdf2svgResult = ProcessBuilderExtensions.runCommand(pdf2svg)
 }
 
 

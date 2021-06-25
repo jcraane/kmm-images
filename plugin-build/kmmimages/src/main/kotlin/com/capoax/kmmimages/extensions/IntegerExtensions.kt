@@ -1,9 +1,11 @@
 package com.capoax.kmmimages.extensions
 
-val Int.indentation: String get() {
-    var indentation = ""
-    repeat(this) {
-        indentation += "  "
+object IntegerExtensions {
+    fun getIndentation(value: Int): String {
+        var indentation = ""
+        repeat(value) {
+            indentation += "  "
+        }
+        return indentation
     }
-    return indentation
 }

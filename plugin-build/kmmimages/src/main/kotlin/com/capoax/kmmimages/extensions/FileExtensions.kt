@@ -3,16 +3,18 @@ package com.capoax.kmmimages.extensions
 import java.io.File
 import java.io.FileFilter
 
-fun File.createFolderIfNotExists(name: String): File {
-    return this.resolve(name).apply {
-        mkdirs()
+object FileExtensions {
+    fun createFolderIfNotExists(file: File,name: String): File {
+        return file.resolve(name).apply {
+            mkdirs()
+        }
     }
-}
 
-fun File.deleteFiles(filter: (File) -> Boolean) {
-    listFiles(FileFilter {
-        filter(it)
-    })?.forEach { file ->
-        file.delete()
+    fun deleteFiles(file: File, filter: (File) -> Boolean) {
+        file.listFiles(FileFilter {
+            filter(it)
+        })?.forEach { file ->
+            file.delete()
+        }
     }
 }

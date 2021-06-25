@@ -4,14 +4,15 @@
     android:viewportWidth="12"
     android:viewportHeight="12">
   <group>
-    <clip-path android:pathData="M0,1L12,1L12,11L0,11ZM0,1 M 0,0"/>
+    <clip-path
+        android:pathData="M0,1L12,1L12,11L0,11ZM0,1"/>
     <group>
-      <clip-path android:pathData="M 10.5 8.5 L 1.5 8.5 L 1.5 2.5 L 10.5 2.5 Z M 10.5 1.5 L 1.5 1.5 C 0.949219 1.5 0.5 1.949219 0.5 2.5 L 0.5 8.5 C 0.5 9.050781 0.949219 9.5 1.5 9.5 L 4 9.5 L 4 10.5 L 8 10.5 L 8 9.5 L 10.5 9.5 C 11.050781 9.5 11.5 9.050781 11.5 8.5 L 11.5 2.5 C 11.5 1.949219 11.050781 1.5 10.5 1.5 Z M 10.5 1.5  M 0,0"/>
+      <clip-path
+          android:pathData="M10.5,8.5L1.5,8.5L1.5,2.5L10.5,2.5ZM10.5,1.5L1.5,1.5C0.9492,1.5 0.5,1.9492 0.5,2.5L0.5,8.5C0.5,9.0508 0.9492,9.5 1.5,9.5L4,9.5L4,10.5L8,10.5L8,9.5L10.5,9.5C11.0508,9.5 11.5,9.0508 11.5,8.5L11.5,2.5C11.5,1.9492 11.0508,1.5 10.5,1.5ZM10.5,1.5"/>
       <path
-          android:pathData="M0.0,0.0h12.0v12.0h-12.0z"
+          android:pathData="M0,0h12v12h-12z"
           android:fillColor="#0A4033"
-          android:strokeColor="#00000000"
-          android:fillAlpha="1"/>
+          android:strokeColor="#00000000"/>
     </group>
   </group>
 </vector>
