@@ -35,18 +35,6 @@ pdf2svg is used for the image conversion from pdf to svg. [https://formulae.brew
 ```
 brew install pdf2svg
 ```
-
-## vd-tool
-
-vd-tool is a tool used to convert svg to Android vector drawables. This tool is a pre-requisite if sgv files are used. See https://www.androiddesignpatterns.com/2018/11/android-studio-svg-to-vector-cli.html for more information. To setup vd-tool do the following:
-
-- Download the vd-tool.zip file
-- Extract the contents of the zip file to a folder of choice
-- Restart the IDE or terminal to make sure the path settings are taken into account.
-- Configure the plugin with the path to <EXTRACTED_CONTENTS>/vd-tool/bin. The recommended way is to add vd-tool/bin to your path so the only configuration needed is the following: pathToVdTool.set("vd-tool")
-
-Please note this tool is only required if raw svg files are used.
-
 # Configuration
 
 ### Using the plugin via Gradle Plugin Portal
@@ -67,7 +55,6 @@ kmmImagesConfig {
     sharedModuleFolder.set(project.projectDir)
     androidSourceFolder.set("main")
     packageName.set("com.example.project")
-    pathToVdTool.set("vd-tool")
     usePdf2SvgTool.set(true) // optional parameter
 }
 ```
@@ -78,7 +65,6 @@ The above snippet applies the kmmimages plugin and configures it.
 - sharedModuleFolder. The path to the shared module (kmm). This project.projectDir if the plugin is configured in the shared module (which is typically the case). 
 - androidSourceFolder. The name of the androidSourceFolder.
 - packageName. The package to use for the generated Images class.
-- pathToVdTool. The path to vd-tool. If vd-tool/bin is exported than 'vd-tool' is enough. If not, the full path to vd-tool must be specified. If the full path is needed make sure it is configurable to not dependen on hard-coded paths in the build file (else the build is not portable).
 - usePdf2SvgTool. When true, uses the pdf2svg tool to convert pdf's to svg. Sometimes this yield better results than imagemagick.
 
 Next, setup the generateImages task and hook it up into the build phase:

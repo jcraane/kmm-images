@@ -28,10 +28,6 @@ abstract class GenerateImagesTask : DefaultTask() {
     abstract val androidSourceFolder: Property<String>
 
     @get:Input
-    @get:Option(option = "pathToVdTool", description = "The path to vd-tool which is used to convert svg to xml.")
-    abstract val pathToVdTool: Property<String>
-
-    @get:Input
     @get:Option(option = "usePdf2SvgTool", description = "If true, uses the pdf2svg tool to convert pdf's to svg, otherwise imagemagick is uses. pdf2svg might yield better results than imagemagick in this case. This setting is here for backwards compatibility reasons, default = false.")
     abstract val usePdf2SvgTool: Property<Boolean>
 
@@ -44,7 +40,6 @@ abstract class GenerateImagesTask : DefaultTask() {
             sharedModuleFolder = sharedModuleFolder.get(),
             androidMainFolder = androidSourceFolder.get(),
             packageName = packageName.get(),
-            pathToVdTool = pathToVdTool.get(),
             logger = project.logger,
             usePdf2SvgTool = usePdf2SvgTool.get()
         ).generate()

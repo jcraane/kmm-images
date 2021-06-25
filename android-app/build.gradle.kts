@@ -11,7 +11,6 @@ kmmImagesConfig {
     sharedModuleFolder.set(project.projectDir)
     androidSourceFolder.set("main")
     packageName.set("com.example.project")
-    pathToVdTool.set("vd-tool")
     usePdf2SvgTool.set(true)
 }
 

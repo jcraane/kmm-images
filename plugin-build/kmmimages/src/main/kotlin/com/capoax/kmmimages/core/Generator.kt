@@ -22,7 +22,6 @@ class Generator(
     val sharedModuleFolder: File,
     val androidMainFolder: String,
     val packageName: String,
-    val pathToVdTool: String,
     val logger: Logger,
     val usePdf2SvgTool: Boolean
 ) {

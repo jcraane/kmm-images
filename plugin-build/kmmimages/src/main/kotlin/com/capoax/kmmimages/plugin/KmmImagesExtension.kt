@@ -18,8 +18,6 @@ abstract class KmmImagesExtension @Inject constructor(project: Project) {
 
     val packageName: Property<String> = objects.property(String::class.java)
 
-    val pathToVdTool: Property<String> = objects.property(String::class.java)
-
     val usePdf2SvgTool: Property<Boolean> = objects.property(Boolean::class.java).apply {
         set(false)
     }
