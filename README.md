@@ -28,6 +28,8 @@ brew install ghostscript
 brew install potrace
 ```
 
+Make sure the magick executable is present in the path.
+
 ## pdf2svg
 
 pdf2svg is used for the image conversion from pdf to svg. [https://formulae.brew.sh/formula/pdf2svg] and [http://cityinthesky.co.uk/opensource/pdf2svg/]
@@ -47,7 +49,7 @@ The following section describes the configuration of the kmm-images plugin in th
 plugins {
     kotlin("multiplatform")
     id("com.android.application")
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha06"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha07"
 }
 
 kmmImagesConfig {
@@ -118,7 +120,7 @@ Apply the plugin:
 
 ```kotlin
 plugins {
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha06"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha07"
 }
 ```
 
@@ -157,6 +159,10 @@ JPG files (which should be used for photos) are not converted and have a fixed d
 - Images.kt: `[project folder]/common/src/commonMain/[path to package]/Images.kt`
 - iOS Images: compiled Assets catalog in `[project folder]/common/src/commonMain/resources/ios/Assets.car`
 - Android Images: `[project folder]/common/src/main/res/drawable*`
+
+# Use in Android and iOS
+
+todo: Add description and code samples to use the images in Android and iOS.
 
 # Known issues
 

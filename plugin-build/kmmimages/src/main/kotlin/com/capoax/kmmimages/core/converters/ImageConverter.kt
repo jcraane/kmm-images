@@ -40,7 +40,7 @@ fun convertImage(
     outputFolder: File,
     outputName: String,
     arguments: List<String> = emptyList()) {
-    val magick = "/usr/local/bin/magick convert ${sourceImage.path} ${arguments.joinToString(" ")} ${outputFolder.path}/$outputName"
+    val magick = "magick convert ${sourceImage.path} ${arguments.joinToString(" ")} ${outputFolder.path}/$outputName"
     val magickResult = ProcessBuilderExtensions.runCommand(magick)
 }
 
