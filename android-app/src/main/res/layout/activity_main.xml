@@ -49,4 +49,13 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_flag_nl"/>
 
+    <TextView
+            android:id="@+id/titleFromViewModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:id="@+id/iconFromViewModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 </LinearLayout>

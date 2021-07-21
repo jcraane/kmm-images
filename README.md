@@ -160,10 +160,123 @@ JPG files (which should be used for photos) are not converted and have a fixed d
 - iOS Images: compiled Assets catalog in `[project folder]/common/src/commonMain/resources/ios/Assets.car`
 - Android Images: `[project folder]/common/src/main/res/drawable*`
 
-# Use in Android and iOS
+# Usage in Android, iOS and shared code
 
-todo: Add description and code samples to use the images in Android and iOS.
+## Usage in Android
 
+This section describes how to use the images from Android source code.
+
+### Usage in xml
+
+Since the generated images are placed in the respective res/drawable* folders, the images can be reference in XML using the standard @drawale notation, like:
+
+```xml
+<ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_flag_nl"/>
+
+```
+
+### Usage in code
+
+There are two ways of using the images from the shared module in code:
+
+1. By referencing the image using the R resource like in the following example:
+
+```kotlin
+findViewById<ImageView>(R.id.image).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.piano))
+```
+
+2. By referencing the images directly from the Images object and using an extension function (this needs to be added to your own project) to obtain the drawable for it:
+
+```kotlin
+/**
+ * Extension function to obtain a drawable from an Image.
+ * 
+ * @param context The Android context which is used to obtain the resources from.
+ * @return Drawable?
+ */
+fun Image.drawable(context: Context): Drawable? {
+    val id = context.resources.getIdentifier(this.name, "drawable", context.packageName)
+    return if (id > 0) {
+        ContextCompat.getDrawable(context, id)
+    } else {
+        null
+    }
+}
+
+// Then use this extension function like this:
+findViewById<ImageView>(R.id.image).setImageDrawable(Images.PIANO.drawable(this))
+```
+
+We suggest adding this extension function to you project since this makes it easy to obtain drawables from imaegs returned from shared code, as demonstrated in the next section.
+
+## Usage in shared code
+
+The real power of images in the shared module is because those images can be references within the shared module. This makes it possible for example to implement a view model in shared code, which prepares the output for the view which also contains the images the view must render.
+
+Consider the following viewmodel which resides in the share code (commonMain):
+
+```kotlin
+/**
+ * This is just an example viewmodel.
+ */
+class MainViewModel {
+    fun createViewState() = MainViewState(
+        title = "My Main Screen",
+        image = Images.IC_FLAG_NL
+    )
+}
+
+data class MainViewState(
+    val title: String,
+    val image: Image
+)
+```
+
+In an Android view we can use the output of the viewmodel to render the image like this (by using the above extension function):
+
+
+```kotlin
+val viewModel = MainViewModel()
+val viewState = viewModel.createViewState()
+findViewById<ImageView>(R.id.iconFromViewModel).setImageDrawable(viewState.image.drawable(this))
+```
+
+## Usage in iOS
+
+To use the images from the shared module in iOS, we recommend adding the following extension function to your project:
+
+
+```swift
+/**
+ * Creates a SwiftUI Image from an image in Images. Use like this: Images().IC_FLAG_NL.swiftUIImage
+ */
+public extension shared.Image {
+
+    private static var sharedBundle = Bundle(for: Images.self)
+
+    var uiImage: UIImage? {
+        let sharedImage = UIImage(named: name, in: shared.Image.sharedBundle, compatibleWith: nil)
+        return sharedImage
+    }
+
+    var swiftUIImage: SwiftUI.Image {
+        return SwiftUI.Image(name, bundle: shared.Image.sharedBundle)
+    }
+}
+```
+
+You can then use this image in SwiftUI like this:
+
+```swift
+HStack {
+    Images().IC_FLAG_NL.swiftUIImage
+}
+```
+
+Use the uiImage to return a UIImage which does not require SwiftUI.
 # Known issues
 
 ## Too complex PDF
