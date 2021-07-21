@@ -10,7 +10,7 @@ struct ContentView: View {
 //        Text(greet())
 //    }
     var body: some View {
-        Image(uiImage: UIImage(named: Images().IC_ARROW_RIGHT.name, in: Bundle(for: Images.self), compatibleWith: nil)!)
+        Images().IC_FLAG_NL.swiftUIImage        
     }
 }
 
