@@ -54,9 +54,8 @@ class Generator(
         val iosOutputFolder = sharedModuleFolder.resolve("src/commonMain/resources/ios")
 
         iosOutputFolder.mkdirs()
-        val xcrun =
-            "/usr/bin/xcrun actool ${iosImageConverter.assetsFolder.path} --compile ${iosOutputFolder.path} --platform iphoneos --minimum-deployment-target 10.0"
-        val xcrunOutput = ProcessBuilderExtensions.runCommand(xcrun, sharedModuleFolder)
+        val xcrunCommand = listOf("/usr/bin/xcrun", "actool", iosImageConverter.assetsFolder.path, "--compile", iosOutputFolder.path, "--platform", "iphoneos", "--minimum-deployment-target", "10.0")
+        val xcrunOutput = ProcessBuilderExtensions.runCommand(xcrunCommand, sharedModuleFolder)
         logger.debug("Output of xcrun = $xcrunOutput")
 
         val kotlinSourceFolder = sharedModuleFolder.resolve("src").resolve("commonMain").resolve("kotlin")

@@ -40,8 +40,10 @@ fun convertImage(
     outputFolder: File,
     outputName: String,
     arguments: List<String> = emptyList()) {
-    val magick = "magick convert ${sourceImage.path} ${arguments.joinToString(" ")} ${outputFolder.path}/$outputName"
-    val magickResult = ProcessBuilderExtensions.runCommand(magick)
+    val command = mutableListOf("magick", "convert", sourceImage.path)
+    command.addAll(arguments)
+    command.add("${outputFolder.path}/$outputName")
+    val magickResult = ProcessBuilderExtensions.runCommand(command)
 }
 
 /**
@@ -51,8 +53,8 @@ fun convertImagePdfToSvg(
     sourceImage: File,
     outputFolder: File,
     outputName: String) {
-    val pdf2svg = "pdf2svg ${sourceImage.path} ${outputFolder.path}/$outputName"
-    val pdf2svgResult = ProcessBuilderExtensions.runCommand(pdf2svg)
+    val command = listOf("pdf2svg", sourceImage.path, "${outputFolder.path}/$outputName")
+    val pdf2svgResult = ProcessBuilderExtensions.runCommand(command)
 }
 
 
