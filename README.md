@@ -208,6 +208,25 @@ fun Image.drawable(context: Context): Drawable? {
 
 // Then use this extension function like this:
 findViewById<ImageView>(R.id.image).setImageDrawable(Images.PIANO.drawable(this))
+
+/**
+ * Extension function to obtain a id from an Image.
+ * 
+ * @param context The Android context which is used to obtain the resources from.
+ * @return Int?
+ */
+
+fun Image.drawable(context: Context): Int {
+    return context.resources.getIdentifier(this.name, "drawable", context.packageName)
+}
+
+
+//  Then use this extension function like this in Jetpack Compose:
+Image( painter = painterResource(Images.PIANO.drawable(this)),
+       contentDescription = "Images"
+      )
+
+
 ```
 
 We suggest adding this extension function to you project since this makes it easy to obtain drawables from imaegs returned from shared code, as demonstrated in the next section.
