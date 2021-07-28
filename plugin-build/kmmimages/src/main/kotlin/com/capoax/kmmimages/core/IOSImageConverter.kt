@@ -61,8 +61,7 @@ class IOSImageConverter(
         logger.debug("IOSImageConverter.convertSvg: $sourceImage")
         val imageName = sourceImage.nameWithoutExtension
         val pdfExtension = ".pdf"
-        val sourceImageFolder = sourceImage.parentFile.canonicalFile
-
+        val sourceImageFolder = sourceImage.parentFile
         val outputName = "$imageName$pdfExtension"
         convertImage(
             sourceImage = sourceImage,
