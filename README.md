@@ -85,6 +85,8 @@ tasks {
 }
 ```
 
+#### Copying resources to framework using packForXCode
+
 Make sure the resources are copied into the framework by adding the following to the pac    kForXCode task (see also the build.gradle.kts file in android-app module):
 
 ```kotlin
@@ -94,6 +96,42 @@ doLast {
             into("${targetDir}/shared.framework")
         }
     }
+```
+
+#### Copying resources to framework using embedAndSignAppleFrameworkForXcode
+
+embedAndSignAppleFrameworkForXcode is the new way of copying resources to the shared framework. To do this, include the following in the build file of the shared module. The CONFIGURATION and SDK_NAME environment variables are set from XCode.
+
+```kotlin
+tasks {
+    // generateImages tasks is defined here as shown above (omitted in this example).
+
+    // This tasks copies the resources to the ios framework, or for a specific architecture use for example the task name: linkDebugFrameworkIosArm64 
+    named("linkDebugFrameworkIos") {
+        doFirst {
+            val configuration = System.getenv("CONFIGURATION")
+            val sdkName = System.getenv("SDK_NAME")
+
+            copy {
+                from("${project.rootDir}/shared/src/commonMain/resources/ios")
+                into("${project.buildDir}/xcode-frameworks/$configuration/$sdkName/shared.framework")
+            }
+        }
+    }
+
+    // And for release
+    named("linkReleaseFrameworkIos") {
+        doFirst {
+            val configuration = System.getenv("CONFIGURATION")
+            val sdkName = System.getenv("SDK_NAME")
+
+            copy {
+                from("${project.rootDir}/shared/src/commonMain/resources/ios")
+                into("${project.buildDir}/xcode-frameworks/$configuration/$sdkName/shared.framework")
+            }
+        }
+    }
+}
 ```
 
 ### Deploy and include plugin locally
