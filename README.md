@@ -29,7 +29,7 @@ brew install potrace
 ```
 
 Make sure the magick executable is present in the PATH. For iOS, the path is determined by the
-building the KMM Framework from Xcode. On modern Mac's Homebrew folder `/opt/homebrew/bin` need to
+building the KMM Framework from Xcode. On modern Macs, Homebrew folder `/opt/homebrew/bin` needs to
 be in the PATH which is done by sourcing `~/.zprofile`. By default Xcode does not source this file.
 To fix that change the Shell of the Run Script step in Xcode from `/bin/sh` to `/bin/zsh -l`.
 
