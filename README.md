@@ -28,7 +28,10 @@ brew install ghostscript
 brew install potrace
 ```
 
-Make sure the magick executable is present in the path.
+Make sure the magick executable is present in the PATH. For iOS, the path is determined by the
+building the KMM Framework from Xcode. On modern Mac's Homebrew folder `/opt/homebrew/bin` need to
+be in the PATH which is done by sourcing `~/.zprofile`. By default Xcode does not source this file.
+To fix that change the Shell of the Run Script step in Xcode from `/bin/sh` to `/bin/zsh -l`.
 
 ## pdf2svg
 
@@ -41,7 +44,7 @@ brew install pdf2svg
 
 ### Using the plugin via Gradle Plugin Portal
 
-The KMMResources plugin is published via the Gradle plugin portal and can be found here: https://plugins.gradle.org/plugin/dev.jamiecraane.plugins.kmmimages
+The KMMImages plugin is published via the Gradle plugin portal and can be found here: https://plugins.gradle.org/plugin/dev.jamiecraane.plugins.kmmimages
 
 The following section describes the configuration of the kmm-images plugin in the Gradle build script, starting with an example:
 
@@ -100,7 +103,7 @@ doLast {
 
 When developing this plugin (or when forking this plugin and adding code to it) you may want to test this plugin in a project not included in this composite build. To do this do the following:
 
-Navigate to the plugin-build folder and execute ```./gradlew :kmmresources:publishToMavenLocal```. This task publishes to the local maven repository.The local Maven repository stores build artefacts used by Maven and Gradle and can be found at ~/.m2/repository
+Navigate to the plugin-build folder and execute ```./gradlew :kmmimages:publishToMavenLocal```. This task publishes to the local maven repository.The local Maven repository stores build artefacts used by Maven and Gradle and can be found at ~/.m2/repository
 
 Navigate to the ~/.m2/repository/dev/jamiecraane/plugins/kmmimages to see the published plugins.
 
