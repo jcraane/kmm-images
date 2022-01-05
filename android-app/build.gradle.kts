@@ -30,11 +30,20 @@ repositories {
 
 kotlin {
     android()
-    ios {
+    /*ios {
         binaries {
             framework {
                 baseName = "shared"
             }
+        }
+    }*/
+    listOf(
+        iosX64(),
+        iosArm64(),
+        //iosSimulatorArm64() sure all ios dependencies support this target
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
         }
     }
 
@@ -57,8 +66,26 @@ kotlin {
                 implementation("junit:junit:4.13")
             }
         }
-        val iosMain by getting
-        val iosTest by getting
+        /*val iosMain by getting
+        val iosTest by getting*/
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        //val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            //iosSimulatorArm64Main.dependsOn(this)
+        }
+        val iosX64Test by getting
+        val iosArm64Test by getting
+        //val iosSimulatorArm64Test by getting
+        val iosTest by creating {
+            dependsOn(commonTest)
+            iosX64Test.dependsOn(this)
+            iosArm64Test.dependsOn(this)
+            //iosSimulatorArm64Test.dependsOn(this)
+        }
     }
 }
 
@@ -84,17 +111,17 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.21")
-    implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("com.google.android.material:material:1.2.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
     testImplementation("junit:junit:4.+")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
 
-val packForXcode by tasks.creating(Sync::class) {
+/*val packForXcode by tasks.creating(Sync::class) {
     group = "build"
     val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
     val sdkName = System.getenv("SDK_NAME") ?: "iphonesimulator"
@@ -113,7 +140,7 @@ val packForXcode by tasks.creating(Sync::class) {
             into("${targetDir}/shared.framework")
         }
     }
-}
+}*/
 
 tasks {
     /**
@@ -131,6 +158,31 @@ tasks {
     named("compileKotlinIosX64") {
         dependsOn(generateImages)
     }
+
+    named("linkDebugFrameworkIosX64") {
+        doFirst {
+            val configuration = System.getenv("CONFIGURATION")
+            val sdkName = System.getenv("SDK_NAME")
+
+            copy {
+                from("${project.rootDir}/android-app/src/commonMain/resources/ios")
+                into("${project.buildDir}/xcode-frameworks/$configuration/$sdkName/shared.framework")
+            }
+        }
+    }
+/*
+    // And for release
+    named("linkReleaseFrameworkIos") {
+        doFirst {
+            val configuration = System.getenv("CONFIGURATION")
+            val sdkName = System.getenv("SDK_NAME")
+
+            copy {
+                from("${project.rootDir}/shared/src/commonMain/resources/ios")
+                into("${project.buildDir}/xcode-frameworks/$configuration/$sdkName/shared.framework")
+            }
+        }
+    }*/
 }
 
 //tasks.getByName("build").dependsOn(packForXcode)
