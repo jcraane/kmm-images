@@ -30,13 +30,6 @@ repositories {
 
 kotlin {
     android()
-    /*ios {
-        binaries {
-            framework {
-                baseName = "shared"
-            }
-        }
-    }*/
     listOf(
         iosX64(),
         iosArm64(),
@@ -66,25 +59,19 @@ kotlin {
                 implementation("junit:junit:4.13")
             }
         }
-        /*val iosMain by getting
-        val iosTest by getting*/
         val iosX64Main by getting
         val iosArm64Main by getting
-        //val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
-            //iosSimulatorArm64Main.dependsOn(this)
         }
         val iosX64Test by getting
         val iosArm64Test by getting
-        //val iosSimulatorArm64Test by getting
         val iosTest by creating {
             dependsOn(commonTest)
             iosX64Test.dependsOn(this)
             iosArm64Test.dependsOn(this)
-            //iosSimulatorArm64Test.dependsOn(this)
         }
     }
 }
@@ -121,27 +108,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
 
-/*val packForXcode by tasks.creating(Sync::class) {
-    group = "build"
-    val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
-    val sdkName = System.getenv("SDK_NAME") ?: "iphonesimulator"
-    val targetName = "ios" + if (sdkName.startsWith("iphoneos")) "Arm64" else "X64"
-    val framework = kotlin.targets.getByName<KotlinNativeTarget>(targetName).binaries.getFramework(mode)
-    inputs.property("mode", mode)
-    dependsOn(framework.linkTask)
-//    val targetDir = File(buildDir, "xcode-frameworks")
-    val targetDir = findProperty("configuration.build.dir")
-    from({ framework.outputDirectory })
-    into(targetDir)
-
-    doLast {
-        copy {
-            from("${project.rootDir}/android-app/src/commonMain/resources/ios")
-            into("${targetDir}/shared.framework")
-        }
-    }
-}*/
-
 tasks {
     /**
      * This sets up dependencies between the plutil task and compileKotlinIos* tasks. This
@@ -170,9 +136,8 @@ tasks {
             }
         }
     }
-/*
-    // And for release
-    named("linkReleaseFrameworkIos") {
+
+    named("linkReleaseFrameworkIosX64") {
         doFirst {
             val configuration = System.getenv("CONFIGURATION")
             val sdkName = System.getenv("SDK_NAME")
@@ -182,7 +147,5 @@ tasks {
                 into("${project.buildDir}/xcode-frameworks/$configuration/$sdkName/shared.framework")
             }
         }
-    }*/
+    }
 }
-
-//tasks.getByName("build").dependsOn(packForXcode)
