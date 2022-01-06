@@ -77,13 +77,13 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(30)
-    buildToolsVersion = "30.0.2"
+    compileSdk = 31
+    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "nl.jcraane.androidapp"
-        minSdkVersion(22)
-        targetSdkVersion(30)
+        minSdk = 22
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
