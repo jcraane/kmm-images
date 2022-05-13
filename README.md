@@ -66,7 +66,7 @@ kmmImagesConfig {
 
 The above snippet applies the kmmimages plugin and configures it.
 
-- imageFolder. This is the folder where the images are found which must be converted to Android and iOS. Subfolders are not supported at the moment.
+- imageFolder. This is the folder where the images are found which must be converted to Android and iOS. Subfolders are reserved for localization.
 - sharedModuleFolder. The path to the shared module (kmm). This project.projectDir if the plugin is configured in the shared module (which is typically the case). 
 - androidSourceFolder. The name of the androidSourceFolder.
 - packageName. The package to use for the generated Images class.
@@ -337,6 +337,39 @@ HStack {
 ```
 
 Use the uiImage to return a UIImage which does not require SwiftUI.
+
+# Localization
+
+To localize images, create folder named as the localization identifier (such as `en` for English and `es` for Spanish) inside the images folder. Place your localized images in here. Make sure the names and extensions are exactly the same across all localizations.
+
+For example:
+
+```
+- images
+  - en
+    - hello.pdf
+    - welcome.png
+  - es
+    - hello.pdf
+    - welcome.png
+  - logo.pdf
+  - other_non_localized_image.png
+```
+
+## iOS
+
+For iOS, this will place localized images inside the image Catalog. Usage of these images is therefore the same as images that are not localized:
+
+```swift
+HStack {
+    Images().WELCOME.swiftUIImage
+}
+```
+
+## Android
+
+TODO
+
 # Known issues
 
 ## Too complex PDF
