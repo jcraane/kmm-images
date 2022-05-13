@@ -27,7 +27,9 @@ class AndroidImageConverter(
         }
     }
 
-    override fun convertPng(sourceImage: File) {
+    override fun convertPng(image: ImageConverter.SourceImage) {
+        val sourceImage = image.files.first().file // TODO: implement locale support for Android
+
         logger.debug("AndroidImageConvert.convertPng: convert $sourceImage")
         pngConversions.forEach { resize, density ->
             val outputFolder = androidResFolder.resolve("drawable-$density")
@@ -37,7 +39,9 @@ class AndroidImageConverter(
         }
     }
 
-    override fun convertPdf(sourceImage: File, usePdf2SvgTool: Boolean) {
+    override fun convertPdf(image: ImageConverter.SourceImage, usePdf2SvgTool: Boolean) {
+        val sourceImage = image.files.first().file // TODO: implement locale support for Android
+
         logger.debug("AndroidImageConvert.convertPdf: convert $sourceImage")
         val outputFolder = androidPathResolver.getSvgBuildFolder()
         outputFolder.mkdirs()
@@ -49,7 +53,9 @@ class AndroidImageConverter(
         }
     }
 
-    override fun convertJpg(sourceImage: File) {
+    override fun convertJpg(image: ImageConverter.SourceImage) {
+        val sourceImage = image.files.first().file // TODO: implement locale support for Android
+
         logger.debug("AndroidImageConvert.convertJpg: convert $sourceImage")
         pngConversions.forEach { resize, density ->
             val outputFolder = androidResFolder.resolve("drawable-$density")
@@ -60,7 +66,9 @@ class AndroidImageConverter(
         }
     }
 
-    override fun convertSvg(sourceImage: File) {
+    override fun convertSvg(image: ImageConverter.SourceImage) {
+        val sourceImage = image.files.first().file // TODO: implement locale support for Android
+
         logger.debug("AndroidImageConvert.convertSvg: convert $sourceImage")
         val destination = androidPathResolver.getSvgBuildFolder()
         destination.mkdirs()

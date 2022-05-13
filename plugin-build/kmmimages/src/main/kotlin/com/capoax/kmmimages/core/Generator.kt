@@ -6,6 +6,7 @@ import com.capoax.kmmimages.core.resolvers.AndroidPathResolver
 import com.capoax.kmmimages.extensions.FileExtensions
 import com.capoax.kmmimages.extensions.ProcessBuilderExtensions
 import org.gradle.api.logging.Logger
+import org.gradle.internal.impldep.org.apache.commons.io.filefilter.DirectoryFileFilter
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileFilter
@@ -39,14 +40,40 @@ class Generator(
         val iosImageConverter = IOSImageConverter(iosBuildFolder, logger)
         val codeGenerator = CodeGenerator(packageName)
 
+        val supportedFilesFilter = FileFilter { supportedFormats.contains(it.extension) }
+
+        val sourceImages = (imagesFolder
+                .listFiles(supportedFilesFilter)
+                ?.toList()
+                ?.map(ImageConverter::SourceImage)
+                ?: emptyList())
+                .toMutableList()
+
         imagesFolder
-            .listFiles(FileFilter { supportedFormats.contains(it.extension) })
-            ?.toList()
-            ?.forEach { image ->
-                ImageConverter.convert(androidImageConverter, image, usePdf2SvgTool)
-                ImageConverter.convert(iosImageConverter, image, usePdf2SvgTool)
-                codeGenerator.addImage(image.nameWithoutExtension)
-            }
+                .listFiles(FileFilter { it.isDirectory })
+                ?.toList()
+                ?.forEach { languageFolder ->
+                    val locale = languageFolder.nameWithoutExtension
+                    languageFolder
+                        .listFiles(supportedFilesFilter)
+                        ?.toList()
+                        ?.forEach { imageFile ->
+                            val index = sourceImages.indexOfFirst { it.name == imageFile.nameWithoutExtension }
+                            if (index == -1) {
+                                sourceImages.add(ImageConverter.SourceImage(imageFile, locale))
+                            } else {
+                                sourceImages[index] = sourceImages[index].with(imageFile, locale)
+                            }
+                        }
+                }
+
+        sourceImages
+                .forEach { image ->
+                    ImageConverter.convert(androidImageConverter, image, usePdf2SvgTool)
+                    ImageConverter.convert(iosImageConverter, image, usePdf2SvgTool)
+                    codeGenerator.addImage(image.name)
+                }
+
 
         convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder, androidPathResolver)
 

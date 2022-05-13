@@ -9,5 +9,6 @@ object Images {
 	val IC_ARROW_RIGHT: Image = Image("ic_arrow_right")
 	val VAS5: Image = Image("vas5")
 	val PNG_ICON: Image = Image("png_icon")
+	val HELLO: Image = Image("hello")
 }
 

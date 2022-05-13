@@ -4,13 +4,27 @@ import com.capoax.kmmimages.extensions.ProcessBuilderExtensions
 import java.io.File
 
 interface ImageConverter {
-    fun convertPng(sourceImage: File)
-    fun convertPdf(sourceImage: File, usePdf2SvgTool: Boolean)
-    fun convertJpg(sourceImage: File)
-    fun convertSvg(sourceImage: File)
+
+    data class SourceImage(val name: String, val files: List<ImageFile>) {
+
+        constructor(file: File): this(file, null)
+        constructor(file: File, locale: String?): this(file.nameWithoutExtension, listOf(ImageFile(file, locale)))
+
+        data class ImageFile(val file: File, val locale: String? = null)
+
+        val extension: String = files.first().file.extension
+        val absolutePath: String = files.first().file.absolutePath
+
+        fun with(imageFile: File, locale: String) = copy(files = files.plus(ImageFile(imageFile, locale)))
+    }
+
+    fun convertPng(sourceImage: SourceImage)
+    fun convertPdf(sourceImage: SourceImage, usePdf2SvgTool: Boolean)
+    fun convertJpg(sourceImage: SourceImage)
+    fun convertSvg(sourceImage: SourceImage)
 
     companion object {
-        fun convert(imageConverter: ImageConverter, sourceImage: File, usePdf2SvgTool: Boolean) {
+        fun convert(imageConverter: ImageConverter, sourceImage: SourceImage, usePdf2SvgTool: Boolean) {
             when (sourceImage.extension) {
                 "png" -> {
                     imageConverter.convertPng(sourceImage)
