@@ -58,11 +58,12 @@ class Generator(
                         .listFiles(supportedFilesFilter)
                         ?.toList()
                         ?.forEach { imageFile ->
-                            val index = sourceImages.indexOfFirst { it.name == imageFile.nameWithoutExtension }
+                            val sourceImage = ImageConverter.SourceImage(imageFile, locale)
+                            val index = sourceImages.indexOfFirst { it.name == sourceImage.name }
                             if (index == -1) {
-                                sourceImages.add(ImageConverter.SourceImage(imageFile, locale))
+                                sourceImages.add(sourceImage)
                             } else {
-                                sourceImages[index] = sourceImages[index].with(imageFile, locale)
+                                sourceImages[index] = sourceImages[index].copy(files = sourceImages[index].files.plus(sourceImage.files))
                             }
                         }
                 }
