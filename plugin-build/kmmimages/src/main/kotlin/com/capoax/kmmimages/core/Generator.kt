@@ -42,12 +42,23 @@ class Generator(
 
         val supportedFilesFilter = FileFilter { supportedFormats.contains(it.extension) }
 
-        val sourceImages = (imagesFolder
+        val sourceImages = mutableListOf<ImageConverter.SourceImage>()
+
+        fun addSourceImage(sourceImage: ImageConverter.SourceImage) {
+            val index = sourceImages.indexOfFirst { it.name == sourceImage.name }
+            if (index == -1) {
+                sourceImages.add(sourceImage)
+            } else {
+                sourceImages[index] = sourceImages[index].copy(files = sourceImages[index].files.plus(sourceImage.files))
+            }
+        }
+
+        imagesFolder
                 .listFiles(supportedFilesFilter)
-                ?.toList()
                 ?.map(ImageConverter::SourceImage)
-                ?: emptyList())
-                .toMutableList()
+                ?.forEach { sourceImage ->
+                    addSourceImage(sourceImage)
+                }
 
         imagesFolder
                 .listFiles(FileFilter { it.isDirectory })
@@ -56,15 +67,9 @@ class Generator(
                     val locale = languageFolder.nameWithoutExtension
                     languageFolder
                         .listFiles(supportedFilesFilter)
-                        ?.toList()
                         ?.forEach { imageFile ->
                             val sourceImage = ImageConverter.SourceImage(imageFile, locale)
-                            val index = sourceImages.indexOfFirst { it.name == sourceImage.name }
-                            if (index == -1) {
-                                sourceImages.add(sourceImage)
-                            } else {
-                                sourceImages[index] = sourceImages[index].copy(files = sourceImages[index].files.plus(sourceImage.files))
-                            }
+                            addSourceImage(sourceImage)
                         }
                 }
 
