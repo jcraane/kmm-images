@@ -7,10 +7,15 @@ interface ImageConverter {
 
     data class SourceImage(val name: String, val files: List<ImageFile>) {
 
-        constructor(file: File): this(file, null)
-        constructor(file: File, locale: String?): this(file.nameWithoutExtension, listOf(ImageFile(file, locale)))
+        enum class Appearance {
+            LIGHT,
+            DARK
+        }
 
-        data class ImageFile(val file: File, val locale: String? = null)
+        constructor(file: File): this(file, null)
+        constructor(file: File, locale: String?): this(file.nameWithoutExtension.nameWithoutAppearanceSpecifier, listOf(ImageFile(file, locale, file.name.appearance ?: Appearance.LIGHT)))
+
+        data class ImageFile(val file: File, val locale: String? = null, val appearance: Appearance = Appearance.LIGHT)
 
         val extension: String = files.first().file.extension
         val absolutePath: String = files.first().file.absolutePath
@@ -71,4 +76,15 @@ fun convertImagePdfToSvg(
     val pdf2svgResult = ProcessBuilderExtensions.runCommand(command)
 }
 
+private val String.appearance: ImageConverter.SourceImage.Appearance?
+    get() = ImageConverter.SourceImage.Appearance.values().firstOrNull { this.contains("_${it.name}", true) }
 
+private val String.nameWithoutAppearanceSpecifier: String
+    get() {
+        var result = this
+        ImageConverter.SourceImage.Appearance.values()
+                .forEach {
+                    result = result.replace("_${it.name}", "", true)
+                }
+        return result
+    }

@@ -356,6 +356,28 @@ For example:
   - other_non_localized_image.png
 ```
 
+# Dark Mode
+
+To support Dark Mode images, you can add `_dark` and optionally `_light` to the name of an image. Make sure the rest of the name matches the corresponding light mode image:
+
+For example:
+```
+- images
+    - en
+        - hello.pdf
+        - hello_dark.pdf
+        - welcome.png
+        - welcome_dark.pdf
+    - es
+        - hello_light.pdf
+        - hello_dark.pdf
+        - welcome_light.png
+        - welcome_dark.png
+    - logo.pdf
+    - logo_dark.pdf
+    - other_non_localized_image.png
+```
+
 ## iOS
 
 For iOS, this will place localized images inside the image Catalog. Usage of these images is therefore the same as images that are not localized:

@@ -28,7 +28,8 @@ data class Image(
     val idiom: String = "universal",
     val filename: String,
     val scale: String? = null,
-    val locale: String? = null
+    val locale: String? = null,
+    val appearances: List<Appearance>? = null
 )
 
 data class Info(
@@ -41,3 +42,5 @@ data class Properties(
     val preservesVectorRepresentation: Boolean? = null,
     val localizable: Boolean? = null
 )
+
+data class Appearance(val appearance: String = "luminosity", val value: String)

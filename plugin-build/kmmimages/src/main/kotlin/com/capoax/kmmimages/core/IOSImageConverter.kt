@@ -33,17 +33,16 @@ class IOSImageConverter(
                 arguments.addAll(listOf("-resize", resize))
             }
 
-            sourceImage.files.map { file ->
-                val scaleName = if (scale.isEmpty()) "" else "@$scale"
-                val localeName = file.locale?.let { "_$it" } ?: ""
-                val fileName = "$imageName$localeName$scaleName.png"
+            val scaleName = if (scale.isEmpty()) "" else "@$scale"
+            sourceImage.outputFiles("png", scaleName).map { output ->
 
-                convertImage(file.file, imageSetFolder, fileName, arguments)
+                convertImage(output.input.file, imageSetFolder, output.name, arguments)
 
                 Image(
-                        filename = fileName,
+                        filename = output.name,
                         scale = if (scale.isEmpty()) "1x" else scale,
-                        locale = file.locale
+                        locale = output.locale,
+                        appearances = output.appearance?.appearances
                 )
             }
 
@@ -69,18 +68,15 @@ class IOSImageConverter(
         val imageName = sourceImage.name
         val pdfExtension = ".pdf"
 
-        val convertedPdf = sourceImage.copy(files = sourceImage.files.map { file ->
-            val sourceImageFolder = file.file.parentFile
-            val localeName = file.locale?.let { "_$it" } ?: ""
-            val outputName = "$imageName$localeName$pdfExtension"
-
+        val convertedPdf = sourceImage.copy(files = sourceImage.outputFiles("pdf").map { output ->
+            val sourceImageFolder = output.input.file.parentFile
             convertImage(
-                    sourceImage = file.file,
+                    sourceImage = output.input.file,
                     outputFolder = sourceImageFolder,
-                    outputName = outputName
+                    outputName = output.name
             )
 
-            file.copy(file = File(sourceImageFolder, outputName))
+            output.input.copy(file = File(sourceImageFolder, output.name))
         })
 
         convertPdf(convertedPdf, usePdf2SvgTool = false)
@@ -92,25 +88,50 @@ class IOSImageConverter(
         val imageName = sourceImage.name
         val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
 
+        val imageList = sourceImage.outputFiles().map { output ->
 
-        val imageList = sourceImage.files.map { file ->
-            val localeName = file.locale?.let { "_$it" } ?: ""
-            val fileName = "$imageName$localeName.${file.file.extension}"
-
-            file.file.copyTo(imageSetFolder.resolve(fileName), overwrite = true)
+            output.input.file.copyTo(imageSetFolder.resolve(output.name), overwrite = true)
 
             Image(
-                    filename = fileName,
-                    locale = file.locale
+                    filename = output.name,
+                    locale = output.locale,
+                    appearances = output.appearance?.appearances
             )
         }
-
 
         Contents(images = imageList.toSet(), properties = (properties ?: Properties()).copy(localizable = sourceImage.localizable)).also {
             it.writeTo(imageSetFolder)
         }
     }
 }
+
+private data class OutputFile(val input: ImageConverter.SourceImage.ImageFile, val name: String, val locale: String? = null, val appearance: ImageConverter.SourceImage.Appearance?)
+
+private fun ImageConverter.SourceImage.outputFiles(extension: String? = null, suffix: String = ""): List<OutputFile> {
+        val hasDarkAppearance = files.any { it.appearance == ImageConverter.SourceImage.Appearance.DARK }
+        return files.flatMap { file ->
+            val localeName = file.locale?.let { "_$it" } ?: ""
+            val appearances = when(file.appearance) {
+                ImageConverter.SourceImage.Appearance.LIGHT -> {
+                    if (hasDarkAppearance) listOf(ImageConverter.SourceImage.Appearance.LIGHT, null) else listOf(null)
+                }
+                ImageConverter.SourceImage.Appearance.DARK -> listOf(ImageConverter.SourceImage.Appearance.DARK)
+            }
+            appearances.map { appearance ->
+                val appearanceName = appearance?.let { "_${appearance.name.toLowerCase()}" } ?: ""
+                val outputName = "$name$localeName$appearanceName$suffix.${extension ?: file.file.extension}"
+                OutputFile(file, outputName, file.locale, appearance)
+            }
+        }
+    }
+
+private val ImageConverter.SourceImage.Appearance.appearances: List<Appearance>
+    get() {
+        return listOf(Appearance(value = when(this) {
+            ImageConverter.SourceImage.Appearance.LIGHT -> "light"
+            ImageConverter.SourceImage.Appearance.DARK -> "dark"
+        }))
+    }
 
 private val ImageConverter.SourceImage.localizable: Boolean?
     get() {
