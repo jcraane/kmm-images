@@ -10,13 +10,18 @@ struct ContentView: View {
 //        Text(greet())
 //    }
     var body: some View {
-        Images().IC_FLAG_NL.swiftUIImage        
+        VStack {
+            Images().HELLO.swiftUIImage
+            Images().PNG_ICON.swiftUIImage
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        Group {
+            ContentView()
+        }
     }
 }
 

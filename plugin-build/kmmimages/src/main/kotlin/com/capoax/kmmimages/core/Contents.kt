@@ -27,7 +27,8 @@ data class Contents(
 data class Image(
     val idiom: String = "universal",
     val filename: String,
-    val scale: String? = null
+    val scale: String? = null,
+    val locale: String? = null
 )
 
 data class Info(
@@ -37,5 +38,6 @@ data class Info(
 
 data class Properties(
     @SerializedName("preserves-vector-representation")
-    val preservesVectorRepresentation: Boolean? = null
+    val preservesVectorRepresentation: Boolean? = null,
+    val localizable: Boolean? = null
 )
