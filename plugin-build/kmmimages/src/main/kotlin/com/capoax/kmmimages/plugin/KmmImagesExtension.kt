@@ -12,14 +12,16 @@ abstract class KmmImagesExtension @Inject constructor(project: Project) {
 
     val sharedModuleFolder: Property<File> = objects.property(File::class.java)
 
-    val androidSourceFolder: Property<String> = objects.property(String::class.java).apply {
-        set("main")
-    }
+    val androidResFolder: Property<File> = objects.property(File::class.java)
 
     val packageName: Property<String> = objects.property(String::class.java)
 
     val usePdf2SvgTool: Property<Boolean> = objects.property(Boolean::class.java).apply {
         set(false)
+    }
+
+    val defaultLanguage: Property<String> = objects.property(String::class.java).apply {
+        set("en")
     }
 
     companion object {

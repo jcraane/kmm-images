@@ -58,8 +58,9 @@ plugins {
 kmmImagesConfig {
     imageFolder.set(project.projectDir.resolve("../images"))
     sharedModuleFolder.set(project.projectDir)
-    androidSourceFolder.set("main")
+    androidResFolder.set(project.projectDir.resolve("../android-app/build/generated/res"))
     packageName.set("com.example.project")
+    defaultLanguage.set("en")
     usePdf2SvgTool.set(true) // optional parameter
 }
 ```
@@ -68,8 +69,9 @@ The above snippet applies the kmmimages plugin and configures it.
 
 - imageFolder. This is the folder where the images are found which must be converted to Android and iOS. Subfolders are reserved for localization.
 - sharedModuleFolder. The path to the shared module (kmm). This project.projectDir if the plugin is configured in the shared module (which is typically the case). 
-- androidSourceFolder. The name of the androidSourceFolder.
+- androidResFolder. This is the folder where the generated images will be located for Android in your project. Make sure this folder is not used for other resources as all it's files and sub directories will be deleted before generating the images.
 - packageName. The package to use for the generated Images class.
+- defaultLanguage. The default language which will be used for the Android drawable resource folders.
 - usePdf2SvgTool. When true, uses the pdf2svg tool to convert pdf's to svg. Sometimes this yield better results than imagemagick.
 
 Next, setup the generateImages task and hook it up into the build phase:
@@ -390,7 +392,7 @@ HStack {
 
 ## Android
 
-TODO
+For Android, this will place localized images inside separate drawable resource folders for each language. The images of the default language will be placed inside the default drawable resource folders. Usage of these images is therefore the same as images that are not localized.
 
 # Known issues
 
