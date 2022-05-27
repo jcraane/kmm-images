@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileFilter
 import java.io.PrintWriter
+import java.nio.file.Files
 
 /**
  * @property imagesFolder The folder where the input images are located.
@@ -23,18 +24,20 @@ import java.io.PrintWriter
 class Generator(
     val imagesFolder: File,
     val sharedModuleFolder: File,
-    val androidMainFolder: String,
+    val androidResFolder: File,
     val packageName: String,
     val logger: Logger,
-    val usePdf2SvgTool: Boolean
+    val usePdf2SvgTool: Boolean,
+    val defaultLanguage: String
 ) {
     fun generate() {
         val buildFolder = sharedModuleFolder.resolve("build/images")
         buildFolder.mkdirs()
-        val androidResFolder = sharedModuleFolder.resolve("src/$androidMainFolder/res")
         val iosBuildFolder = FileExtensions.createFolderIfNotExists(buildFolder, "ios")
         val androidBuildFolder = FileExtensions.createFolderIfNotExists(buildFolder, "android")
         val androidPathResolver = AndroidPathResolver(androidBuildFolder)
+
+        androidResFolder.mkdirs()
 
         val androidImageConverter = AndroidImageConverter(androidResFolder, androidPathResolver, logger)
         val iosImageConverter = IOSImageConverter(iosBuildFolder, logger)
@@ -75,8 +78,8 @@ class Generator(
 
         sourceImages
                 .forEach { image ->
-                    ImageConverter.convert(androidImageConverter, image, usePdf2SvgTool)
-                    ImageConverter.convert(iosImageConverter, image, usePdf2SvgTool)
+                    ImageConverter.convert(androidImageConverter, image, usePdf2SvgTool, defaultLanguage)
+                    ImageConverter.convert(iosImageConverter, image, usePdf2SvgTool, defaultLanguage)
                     codeGenerator.addImage(image.name)
                 }
 
@@ -100,7 +103,6 @@ class Generator(
     }
 
     private fun convertAndroidSvgToVectorDrawableIfSvgsArePresent(androidResFolder: File, androidPathResolver: AndroidPathResolver) {
-        val androidDrawableFolder = FileExtensions.createFolderIfNotExists(androidResFolder, "drawable")
         val svgFolder = androidPathResolver.getSvgBuildFolder()
         val containsSvg = svgFolder.listFiles(FileFilter { it.extension.endsWith(SVG) })
             ?.toList()
@@ -108,12 +110,15 @@ class Generator(
 
         if (containsSvg) {
             logger.debug("Convert svg's to Android vector drawables")
-            svgFolder.listFiles().forEach { svg ->
-                logger.debug("Convert $svg")
+            androidPathResolver.getSvgFiles().forEach { svg ->
+                logger.debug("Convert ${svg.file}")
                 val baos = ByteArrayOutputStream()
-                val vectorDrawableName = "${svg.nameWithoutExtension}.xml"
+
+                val vectorDrawableName = "${svg.name}.xml"
+
+                val androidDrawableFolder = FileExtensions.createFolderIfNotExists(androidResFolder, svg.resFolder)
                 val outputFile = File(androidDrawableFolder, vectorDrawableName)
-                val error = Svg2Vector.parseSvgToXml(svg, baos)
+                val error = Svg2Vector.parseSvgToXml(svg.file, baos)
 
                 // An error does not mean necessarily that the image could not be parsed. Generate it anyway
                 if (error.isNotEmpty()) {

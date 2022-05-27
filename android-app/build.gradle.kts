@@ -9,8 +9,9 @@ plugins {
 kmmImagesConfig {
     imageFolder.set(project.projectDir.resolve("../images"))
     sharedModuleFolder.set(project.projectDir)
-    androidSourceFolder.set("main")
+    androidResFolder.set(project.projectDir.resolve("../android-app/build/generated/res"))
     packageName.set("com.example.project")
+    defaultLanguage.set("en")
     usePdf2SvgTool.set(true)
 }
 
@@ -93,6 +94,12 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    sourceSets {
+        getByName("main") {
+            res.srcDirs("../android-app/build/generated/res")
         }
     }
 }

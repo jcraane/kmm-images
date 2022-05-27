@@ -23,7 +23,7 @@ class IOSImageConverter(
         Contents().writeTo(assetsFolder)
     }
 
-    override fun convertPng(sourceImage: ImageConverter.SourceImage) {
+    override fun convertPng(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
         logger.debug("IOSImageConverter.convertPng: $sourceImage")
         val imageName = sourceImage.name
         val imageSetFolder = assetsFolder.resolve("$imageName.imageSet").apply { mkdirs() }
@@ -53,17 +53,17 @@ class IOSImageConverter(
         }
     }
 
-    override fun convertPdf(sourceImage: ImageConverter.SourceImage, usePdf2SvgTool: Boolean) {
+    override fun convertPdf(sourceImage: ImageConverter.SourceImage, usePdf2SvgTool: Boolean, defaultLanguage: String) {
         logger.debug("IOSImageConverter.convertPdf: $sourceImage")
         copyImage(sourceImage, Properties(preservesVectorRepresentation = true))
     }
 
-    override fun convertJpg(sourceImage: ImageConverter.SourceImage) {
+    override fun convertJpg(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
         logger.debug("IOSImageConverter.convertJpg: $sourceImage")
         copyImage(sourceImage)
     }
 
-    override fun convertSvg(sourceImage: ImageConverter.SourceImage) {
+    override fun convertSvg(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
         logger.debug("IOSImageConverter.convertSvg: $sourceImage")
         val imageName = sourceImage.name
         val pdfExtension = ".pdf"
@@ -79,7 +79,7 @@ class IOSImageConverter(
             output.input.copy(file = File(sourceImageFolder, output.name))
         })
 
-        convertPdf(convertedPdf, usePdf2SvgTool = false)
+        convertPdf(convertedPdf, usePdf2SvgTool = false, defaultLanguage = defaultLanguage)
 
         convertedPdf.files.forEach { it.file.delete() }
     }
