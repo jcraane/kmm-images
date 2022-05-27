@@ -4,6 +4,13 @@ Generate images for iOS and Android from a all supported images in the shared mo
 
 At the moment it does depend on some external tools for image conversion. These are described below.
 
+## Upgrading/release
+
+### Upgrade to alpha09
+
+- Remove from kmmImagesConfig: androidSourceFolder.set("androidMain")
+- Add to kmmImagesCondig: androidResFolder.set(project.projectDir.resolve("../androidApp/build/generated/res")), see Using the plugin via Gradle Plugin Portal.
+
 # Requirements
 
 Running the CommonImages depends on a couple of command line tools which must be installed.
@@ -52,7 +59,7 @@ The following section describes the configuration of the kmm-images plugin in th
 plugins {
     kotlin("multiplatform")
     id("com.android.application")
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha08"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha09"
 }
 
 kmmImagesConfig {
@@ -163,7 +170,7 @@ Apply the plugin:
 
 ```kotlin
 plugins {
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha08"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha09"
 }
 ```
 
