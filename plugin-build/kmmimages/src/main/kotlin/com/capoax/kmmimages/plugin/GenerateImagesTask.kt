@@ -24,12 +24,16 @@ abstract class GenerateImagesTask : DefaultTask() {
     abstract val packageName: Property<String>
 
     @get:Input
-    @get:Option(option = "androidSourceFolder", description = "The source folder to generate the localizations class for Android. Defaults to main, but some multiplatform projects use androidMain.")
-    abstract val androidSourceFolder: Property<String>
+    @get:Option(option = "androidResFolder", description = "The source folder to generate the localizations class for Android. Defaults to main, but some multiplatform projects use androidMain.")
+    abstract val androidResFolder: Property<File>
 
     @get:Input
     @get:Option(option = "usePdf2SvgTool", description = "If true, uses the pdf2svg tool to convert pdf's to svg, otherwise imagemagick is uses. pdf2svg might yield better results than imagemagick in this case. This setting is here for backwards compatibility reasons, default = false.")
     abstract val usePdf2SvgTool: Property<Boolean>
+
+    @get:Input
+    @get:Option(option = "defaultLanguage", description = "The default locale. Used in Android to determine which language is in the default drawable folder.")
+    abstract val defaultLanguage: Property<String>
 
     @TaskAction
     fun generate() {
@@ -38,10 +42,11 @@ abstract class GenerateImagesTask : DefaultTask() {
         Generator(
             imagesFolder = imageFolder.get(),
             sharedModuleFolder = sharedModuleFolder.get(),
-            androidMainFolder = androidSourceFolder.get(),
+            androidResFolder = androidResFolder.get(),
             packageName = packageName.get(),
             logger = project.logger,
-            usePdf2SvgTool = usePdf2SvgTool.get()
+            usePdf2SvgTool = usePdf2SvgTool.get(),
+            defaultLanguage = defaultLanguage.get()
         ).generate()
     }
 

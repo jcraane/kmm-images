@@ -23,25 +23,25 @@ interface ImageConverter {
         fun with(imageFile: File, locale: String) = copy(files = files.plus(ImageFile(imageFile, locale)))
     }
 
-    fun convertPng(sourceImage: SourceImage)
-    fun convertPdf(sourceImage: SourceImage, usePdf2SvgTool: Boolean)
-    fun convertJpg(sourceImage: SourceImage)
-    fun convertSvg(sourceImage: SourceImage)
+    fun convertPng(sourceImage: SourceImage, defaultLanguage: String)
+    fun convertPdf(sourceImage: SourceImage, usePdf2SvgTool: Boolean, defaultLanguage: String)
+    fun convertJpg(sourceImage: SourceImage, defaultLanguage: String)
+    fun convertSvg(sourceImage: SourceImage, defaultLanguage: String)
 
     companion object {
-        fun convert(imageConverter: ImageConverter, sourceImage: SourceImage, usePdf2SvgTool: Boolean) {
+        fun convert(imageConverter: ImageConverter, sourceImage: SourceImage, usePdf2SvgTool: Boolean, defaultLanguage: String) {
             when (sourceImage.extension) {
                 "png" -> {
-                    imageConverter.convertPng(sourceImage)
+                    imageConverter.convertPng(sourceImage, defaultLanguage)
                 }
                 "pdf" -> {
-                    imageConverter.convertPdf(sourceImage, usePdf2SvgTool)
+                    imageConverter.convertPdf(sourceImage, usePdf2SvgTool, defaultLanguage)
                 }
                 "jpg" -> {
-                    imageConverter.convertJpg(sourceImage)
+                    imageConverter.convertJpg(sourceImage, defaultLanguage)
                 }
                 "svg" -> {
-                    imageConverter.convertSvg(sourceImage)
+                    imageConverter.convertSvg(sourceImage, defaultLanguage)
                 }
                 else -> throw ImageConverterError("${sourceImage.extension} not supported (${sourceImage.absolutePath})")
             }

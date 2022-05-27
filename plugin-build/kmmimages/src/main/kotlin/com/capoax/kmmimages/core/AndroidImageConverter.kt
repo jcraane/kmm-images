@@ -6,11 +6,15 @@ import com.capoax.kmmimages.core.converters.convertImagePdfToSvg
 import com.capoax.kmmimages.core.resolvers.AndroidPathResolver
 import org.gradle.api.logging.Logger
 import java.io.File
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.name
 
 class AndroidImageConverter(
     private val androidResFolder: File,
     private val androidPathResolver: AndroidPathResolver,
-    private val logger: Logger) : ImageConverter {
+    private val logger: Logger
+) : ImageConverter {
     val pngConversions = mapOf(
         "" to "xxxhdpi",
         "75%" to "xxhdpi",
@@ -20,58 +24,117 @@ class AndroidImageConverter(
     )
 
     init {
-        pngConversions.forEach { resize, density ->
-            val outputFolder = androidResFolder.resolve("drawable-$density")
-            outputFolder.deleteRecursively()
+        androidResFolder.deleteRecursively()
+    }
+
+    override fun convertPng(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
+        sourceImage.files.forEach { imageFile ->
+            logger.debug("AndroidImageConvert.convertPng: convert ${imageFile.file}")
+            pngConversions.forEach { (resize, density) ->
+                val outputFolder = getOutputFolder(
+                    defaultLanguage = defaultLanguage,
+                    appearance = imageFile.appearance,
+                    locale = imageFile.locale,
+                    density = density
+                )
+
+                val arguments = if (!resize.isEmpty()) listOf("-resize", resize) else emptyList()
+
+                convertImage(imageFile.file, outputFolder, imageFile.file.name.withoutAppearance(), arguments)
+            }
+        }
+    }
+
+    override fun convertPdf(sourceImage: ImageConverter.SourceImage, usePdf2SvgTool: Boolean, defaultLanguage: String) {
+        sourceImage.files.forEach { imageFile ->
+            logger.debug("AndroidImageConvert.convertPdf: convert ${imageFile.file}")
+            val outputFolder = androidPathResolver.getSvgBuildFolder()
+            outputFolder.mkdirs()
+            val svgFileName = "${getSvgFileName(imageFile, defaultLanguage)}.svg"
+            if (usePdf2SvgTool) {
+                convertImagePdfToSvg(imageFile.file, outputFolder, svgFileName)
+            } else {
+                convertImage(imageFile.file, outputFolder, svgFileName)
+            }
+        }
+    }
+
+    override fun convertJpg(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
+        sourceImage.files.forEach { imageFile ->
+            logger.debug("AndroidImageConvert.convertJpg: convert ${imageFile.file}")
+            pngConversions.forEach { (resize, density) ->
+                val outputFolder = getOutputFolder(
+                    defaultLanguage = defaultLanguage,
+                    appearance = imageFile.appearance,
+                    locale = imageFile.locale,
+                    density = density
+                )
+
+                val imageOutputFile = File(outputFolder, imageFile.file.name.withoutAppearance())
+                imageFile.file.copyTo(imageOutputFile, overwrite = true)
+            }
+        }
+    }
+
+    override fun convertSvg(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
+        sourceImage.files.forEach { imageFile ->
+            logger.debug("AndroidImageConvert.convertSvg: convert ${imageFile.file}")
+            val destination = androidPathResolver.getSvgBuildFolder()
+            destination.mkdirs()
+            imageFile.file.copyTo(
+                destination.resolve(getSvgFileName(imageFile, defaultLanguage)),
+                overwrite = true
+            )
+        }
+    }
+
+    /**
+     * Constructs a folder name based on the image density, locale & appearance
+     * and creates this folder if it does not exist yet
+     *
+     * @return output folder name for Android drawable resource
+     */
+    private fun getOutputFolder(
+        defaultLanguage: String,
+        appearance: ImageConverter.SourceImage.Appearance? = null,
+        locale: String? = null,
+        density: String? = null
+    ): File {
+        val themeRes =
+            if (appearance == ImageConverter.SourceImage.Appearance.DARK) "-night" else ""
+        val localeRes = if (locale != null && locale != defaultLanguage) "-$locale" else ""
+        val densityRes = if (density != null) "-$density" else ""
+
+        val folderName = "drawable$localeRes$themeRes$densityRes"
+
+        val outputFolder = androidResFolder.resolve(folderName)
+
+        if (!outputFolder.isDirectory) {
             outputFolder.mkdirs()
         }
+
+        return outputFolder
     }
 
-    override fun convertPng(image: ImageConverter.SourceImage) {
-        val sourceImage = image.files.first().file // TODO: implement locale support for Android
+    /**
+     * Constructs a file name based on the image locale & appearance
+     * @return file name, for example: filename_androidRes_es_night
+     */
+    private fun getSvgFileName(
+        imageFile: ImageConverter.SourceImage.ImageFile,
+        defaultLanguage: String
+    ): String {
+        val localePostfix = if (imageFile.locale != null && imageFile.locale != defaultLanguage) "_${imageFile.locale}" else ""
+        val themePostfix = if (imageFile.appearance == ImageConverter.SourceImage.Appearance.DARK) "_night" else ""
+        val fileName = imageFile.file.nameWithoutExtension.withoutAppearance()
 
-        logger.debug("AndroidImageConvert.convertPng: convert $sourceImage")
-        pngConversions.forEach { resize, density ->
-            val outputFolder = androidResFolder.resolve("drawable-$density")
-            val arguments = if (!resize.isEmpty()) listOf("-resize", resize) else emptyList<String>()
+        val postfix = if (localePostfix.isNotBlank() || themePostfix.isNotBlank()) {
+            "${AndroidPathResolver.ANDROID_RES_PREFIX}$localePostfix$themePostfix"
+        } else ""
 
-            convertImage(sourceImage, outputFolder, sourceImage.name, arguments)
-        }
+        return "$fileName$postfix"
     }
 
-    override fun convertPdf(image: ImageConverter.SourceImage, usePdf2SvgTool: Boolean) {
-        val sourceImage = image.files.first().file // TODO: implement locale support for Android
-
-        logger.debug("AndroidImageConvert.convertPdf: convert $sourceImage")
-        val outputFolder = androidPathResolver.getSvgBuildFolder()
-        outputFolder.mkdirs()
-        val svgFileName = "${sourceImage.nameWithoutExtension}.svg"
-        if (usePdf2SvgTool) {
-            convertImagePdfToSvg(sourceImage, outputFolder, svgFileName)
-        } else {
-            convertImage(sourceImage, outputFolder, svgFileName)
-        }
-    }
-
-    override fun convertJpg(image: ImageConverter.SourceImage) {
-        val sourceImage = image.files.first().file // TODO: implement locale support for Android
-
-        logger.debug("AndroidImageConvert.convertJpg: convert $sourceImage")
-        pngConversions.forEach { resize, density ->
-            val outputFolder = androidResFolder.resolve("drawable-$density")
-            outputFolder.mkdirs()
-
-            val imageOutputFile = File(outputFolder, sourceImage.name)
-            sourceImage.copyTo(imageOutputFile, overwrite = true)
-        }
-    }
-
-    override fun convertSvg(image: ImageConverter.SourceImage) {
-        val sourceImage = image.files.first().file // TODO: implement locale support for Android
-
-        logger.debug("AndroidImageConvert.convertSvg: convert $sourceImage")
-        val destination = androidPathResolver.getSvgBuildFolder()
-        destination.mkdirs()
-        sourceImage.copyTo(destination.resolve(sourceImage.name), overwrite = true)
-    }
+    private fun String.withoutAppearance() = replace("_dark", "")
+        .replace("_light", "")
 }
