@@ -20,6 +20,14 @@ interface ImageConverter {
         val extension: String = files.first().file.extension
         val absolutePath: String = files.first().file.absolutePath
 
+        /**
+         * Check if all files within the SourceImage are of the same extension
+         */
+        fun isValid(): Boolean {
+            val allFileExtensions = files.map { it.file.extension }.distinct()
+            return allFileExtensions.size == 1
+        }
+
         fun with(imageFile: File, locale: String) = copy(files = files.plus(ImageFile(imageFile, locale)))
     }
 
@@ -30,6 +38,10 @@ interface ImageConverter {
 
     companion object {
         fun convert(imageConverter: ImageConverter, sourceImage: SourceImage, usePdf2SvgTool: Boolean, defaultLanguage: String) {
+            if (!sourceImage.isValid()) {
+                throw IllegalStateException("Multiple images with different extensions found for ${sourceImage.name}, make sure there are no duplicates")
+            }
+
             when (sourceImage.extension) {
                 "png" -> {
                     imageConverter.convertPng(sourceImage, defaultLanguage)
