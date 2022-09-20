@@ -27,7 +27,7 @@ gradlePlugin {
             id = "dev.jamiecraane.plugins.kmmimages"
             implementationClass = "com.capoax.kmmimages.plugin.KmmImagesPlugin"
             description = description
-            version = "1.0.0-alpha10"
+            version = "1.0.0-alpha11"
         }
     }
 }
