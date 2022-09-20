@@ -92,7 +92,7 @@ class Generator(
         iosOutputFolder.mkdirs()
         val xcrunCommand = listOf("/usr/bin/xcrun", "actool", iosImageConverter.assetsFolder.path, "--compile", iosOutputFolder.path, "--platform", "iphoneos", "--minimum-deployment-target", "10.0")
         val xcrunOutput = ProcessBuilderExtensions.runCommand(xcrunCommand, sharedModuleFolder)
-        logger.debug("Output of xcrun = $xcrunOutput")
+        logger.info("Output of xcrun = $xcrunOutput")
 
         val kotlinSourceFolder = sharedModuleFolder.resolve("src").resolve("commonMain").resolve("kotlin")
 
@@ -109,9 +109,9 @@ class Generator(
             ?.isNotEmpty() == true
 
         if (containsSvg) {
-            logger.debug("Convert svg's to Android vector drawables")
+            logger.info("Convert svg's to Android vector drawables")
             androidPathResolver.getSvgFiles().forEach { svg ->
-                logger.debug("Convert ${svg.file}")
+                logger.info("Convert ${svg.file}")
                 val baos = ByteArrayOutputStream()
 
                 val vectorDrawableName = "${svg.name}.xml"

@@ -37,7 +37,7 @@ abstract class GenerateImagesTask : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        project.logger.debug("About to generate images for all supported platforms.")
+        project.logger.info("About to generate images for all supported platforms.")
 
         Generator(
             imagesFolder = imageFolder.get(),

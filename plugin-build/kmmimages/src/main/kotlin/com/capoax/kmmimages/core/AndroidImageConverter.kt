@@ -29,7 +29,7 @@ class AndroidImageConverter(
 
     override fun convertPng(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
         sourceImage.files.forEach { imageFile ->
-            logger.debug("AndroidImageConvert.convertPng: convert ${imageFile.file}")
+            logger.info("AndroidImageConvert.convertPng: convert ${imageFile.file}")
             pngConversions.forEach { (resize, density) ->
                 val outputFolder = getOutputFolder(
                     defaultLanguage = defaultLanguage,
@@ -47,7 +47,7 @@ class AndroidImageConverter(
 
     override fun convertPdf(sourceImage: ImageConverter.SourceImage, usePdf2SvgTool: Boolean, defaultLanguage: String) {
         sourceImage.files.forEach { imageFile ->
-            logger.debug("AndroidImageConvert.convertPdf: convert ${imageFile.file}")
+            logger.info("AndroidImageConvert.convertPdf: convert ${imageFile.file}")
             val outputFolder = androidPathResolver.getSvgBuildFolder()
             outputFolder.mkdirs()
             val svgFileName = "${getSvgFileName(imageFile, defaultLanguage)}.svg"
@@ -61,7 +61,7 @@ class AndroidImageConverter(
 
     override fun convertJpg(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
         sourceImage.files.forEach { imageFile ->
-            logger.debug("AndroidImageConvert.convertJpg: convert ${imageFile.file}")
+            logger.info("AndroidImageConvert.convertJpg: convert ${imageFile.file}")
             pngConversions.forEach { (resize, density) ->
                 val outputFolder = getOutputFolder(
                     defaultLanguage = defaultLanguage,
@@ -78,7 +78,7 @@ class AndroidImageConverter(
 
     override fun convertSvg(sourceImage: ImageConverter.SourceImage, defaultLanguage: String) {
         sourceImage.files.forEach { imageFile ->
-            logger.debug("AndroidImageConvert.convertSvg: convert ${imageFile.file}")
+            logger.info("AndroidImageConvert.convertSvg: convert ${imageFile.file}")
             val destination = androidPathResolver.getSvgBuildFolder()
             destination.mkdirs()
             imageFile.file.copyTo(
