@@ -109,11 +109,11 @@ class Generator(
             ?.toList()
             ?.isNotEmpty() == true
 
-        logger.info("containsSvg = $containsSvg")
+        logger.debug("containsSvg = $containsSvg")
         if (containsSvg) {
             logger.info("Convert svg's to Android vector drawables")
             androidPathResolver.getSvgFiles().forEach { svg ->
-                logger.info("Convert ${svg.file}")
+                logger.debug("Convert ${svg.file}")
                 val baos = ByteArrayOutputStream()
 
                 val vectorDrawableName = "${svg.name}.xml"
@@ -128,7 +128,6 @@ class Generator(
                 }
 
                 val vectorXmlContent = baos.toString()
-                println("vectorXmlContent = $vectorXmlContent")
                 PrintWriter(outputFile).also { writer ->
                     writer.write(vectorXmlContent)
                     writer.flush()
