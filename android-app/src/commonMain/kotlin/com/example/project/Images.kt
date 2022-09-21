@@ -7,6 +7,7 @@ object Images {
 	val IC_FLAG_NL: Image = Image("ic_flag_nl")
 	val KEYBOARD: Image = Image("keyboard")
 	val NEW_CLOSE_ROUND: Image = Image("new_close_round")
+	val IC_BOTTOMMENU_HOME: Image = Image("ic_bottommenu_home")
 	val IC_ARROW_RIGHT: Image = Image("ic_arrow_right")
 	val VAS5: Image = Image("vas5")
 	val PNG_ICON: Image = Image("png_icon")

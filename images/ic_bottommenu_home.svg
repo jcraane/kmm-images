@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="17px" viewBox="0 0 20 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icn_home</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Cursus-modules" transform="translate(-35.000000, -668.000000)" fill="#FFFFFF">
+            <g id="Bottom-Navigation" transform="translate(0.000000, 656.000000)">
+                <g id="icn_home_grey_24" transform="translate(33.000000, 8.000000)">
+                    <path d="M15,21 L19,21 L19,13 L5,13 L5,21 L9,21 L9,17.0016655 C9,15.3438914 10.3465171,14 12,14 C13.6568542,14 15,15.3390201 15,17.0016655 L15,21 L15,21 L15,21 L15,21 L15,21 Z M12,4 L22,13 L2,13 L12,4 L12,4 L12,4 L12,4 L12,4 Z" id="icn_home"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

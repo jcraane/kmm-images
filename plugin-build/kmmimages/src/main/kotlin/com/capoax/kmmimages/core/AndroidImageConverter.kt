@@ -40,6 +40,7 @@ class AndroidImageConverter(
 
                 val arguments = if (!resize.isEmpty()) listOf("-resize", resize) else emptyList()
 
+                logger.info("Copy $imageFile to $outputFolder")
                 convertImage(imageFile.file, outputFolder, imageFile.file.name.withoutAppearance(), arguments)
             }
         }
@@ -50,7 +51,7 @@ class AndroidImageConverter(
             logger.info("AndroidImageConvert.convertPdf: convert ${imageFile.file}")
             val outputFolder = androidPathResolver.getSvgBuildFolder()
             outputFolder.mkdirs()
-            val svgFileName = "${getSvgFileName(imageFile, defaultLanguage)}.svg"
+            val svgFileName = "${getSvgFileName(imageFile, defaultLanguage)}"
             if (usePdf2SvgTool) {
                 convertImagePdfToSvg(imageFile.file, outputFolder, svgFileName)
             } else {
@@ -81,6 +82,7 @@ class AndroidImageConverter(
             logger.info("AndroidImageConvert.convertSvg: convert ${imageFile.file}")
             val destination = androidPathResolver.getSvgBuildFolder()
             destination.mkdirs()
+            logger.info("Copy $imageFile to $destination")
             imageFile.file.copyTo(
                 destination.resolve(getSvgFileName(imageFile, defaultLanguage)),
                 overwrite = true
@@ -132,9 +134,13 @@ class AndroidImageConverter(
             "${AndroidPathResolver.ANDROID_RES_PREFIX}$localePostfix$themePostfix"
         } else ""
 
-        return "$fileName$postfix"
+        return "$fileName$postfix$SVG_EXTENSIONS"
     }
 
     private fun String.withoutAppearance() = replace("_dark", "")
         .replace("_light", "")
+
+    companion object {
+        private const val SVG_EXTENSIONS = ".svg"
+    }
 }

@@ -4,6 +4,10 @@ Generate images for iOS and Android from a all supported images in the shared mo
 
 At the moment it does depend on some external tools for image conversion. These are described below.
 
+## Faq
+
+The generated images are not picked up by the Android app? Make sure the path to the resources is added as a source set, see [Where should I put the generated images in Android?](#where-should-i-put-the-generated-images-in-android)
+
 ## Upgrading/release
 
 ### Upgrade to alpha10
@@ -97,6 +101,28 @@ tasks {
 }
 ```
 
+#### Where should I put the generated images in Android?
+
+As stated the directory which contains the generated images will be deleted when generating new ones. The above example puts the images in the ../android-app/build/generated/res which is automatically cleaned by Gradle. The images are not put in version control this way.
+
+If you do want to put the images in version control you can use a dedicated folder under src/main like this:
+
+```kotlin
+androidResFolder.set(project.projectDir.resolve("../androidApp/src/main/res-kmmimages"))
+```
+
+This way the images can be checked in and remain separate from the other resources.
+
+Because we use a non-standard path for the resources it is important to add this path to the sourceSets config. This is done like this (In the android config section of the build.gradle.kts file of the android project):
+
+```kotlin
+sourceSets {
+    getByName("main") {
+        res.srcDirs("../androidApp/src/main/res-kmmimages")
+    }
+}
+```
+
 #### Copying resources to framework using packForXCode
 
 Make sure the resources are copied into the framework by adding the following to the pac    kForXCode task (see also the build.gradle.kts file in android-app module):
@@ -150,7 +176,7 @@ tasks {
 
 When developing this plugin (or when forking this plugin and adding code to it) you may want to test this plugin in a project not included in this composite build. To do this do the following:
 
-Navigate to the plugin-build folder and execute ```./gradlew :kmmimages:publishToMavenLocal```. This task publishes to the local maven repository.The local Maven repository stores build artefacts used by Maven and Gradle and can be found at ~/.m2/repository
+Navigate to the plugin-build folder and execute ```./gradlew :plugin-build:kmmimages:publishToMavenLocal```. This task publishes to the local maven repository.The local Maven repository stores build artefacts used by Maven and Gradle and can be found at ~/.m2/repository
 
 Navigate to the ~/.m2/repository/dev/jamiecraane/plugins/kmmimages to see the published plugins.
 
