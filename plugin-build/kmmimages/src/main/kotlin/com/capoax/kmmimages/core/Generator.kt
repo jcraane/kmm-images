@@ -28,7 +28,8 @@ class Generator(
     val packageName: String,
     val logger: Logger,
     val usePdf2SvgTool: Boolean,
-    val defaultLanguage: String
+    val defaultLanguage: String,
+    val kotlinMainSourceFolder: String,
 ) {
     fun generate() {
         val buildFolder = sharedModuleFolder.resolve("build/images")
@@ -94,7 +95,7 @@ class Generator(
         val xcrunOutput = ProcessBuilderExtensions.runCommand(xcrunCommand, sharedModuleFolder)
         logger.info("Output of xcrun = $xcrunOutput")
 
-        val kotlinSourceFolder = sharedModuleFolder.resolve("src").resolve("commonMain").resolve("kotlin")
+        val kotlinSourceFolder = sharedModuleFolder.resolve("src").resolve(kotlinMainSourceFolder).resolve("kotlin")
 
         val packageFolder = kotlinSourceFolder.resolve(packageName.replace(".", "/"))
         packageFolder.mkdirs()

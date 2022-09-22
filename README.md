@@ -63,7 +63,7 @@ The following section describes the configuration of the kmm-images plugin in th
 plugins {
     kotlin("multiplatform")
     id("com.android.application")
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha11"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha12"
 }
 
 kmmImagesConfig {
@@ -72,7 +72,8 @@ kmmImagesConfig {
     androidResFolder.set(project.projectDir.resolve("../android-app/build/generated/res"))
     packageName.set("com.example.project")
     defaultLanguage.set("en")
-    usePdf2SvgTool.set(true) // optional parameter
+    usePdf2SvgTool.set(true) // Optional parameter
+    kotlinMainSourceFolder.set("commonMain") // Optional parameter
 }
 ```
 
@@ -84,6 +85,7 @@ The above snippet applies the kmmimages plugin and configures it.
 - packageName. The package to use for the generated Images class.
 - defaultLanguage. The default language which will be used for the Android drawable resource folders.
 - usePdf2SvgTool. When true, uses the pdf2svg tool to convert pdf's to svg. Sometimes this yield better results than imagemagick.
+- kotlinMainSourceFolder. Main source folder where the generated code is placed. Defaults to commonMain. When this plugin is used in a standalone Android app set to 'main'.
 
 Next, setup the generateImages task and hook it up into the build phase:
 
@@ -196,7 +198,7 @@ Apply the plugin:
 
 ```kotlin
 plugins {
-    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha11"
+    id("dev.jamiecraane.plugins.kmmimages") version "1.0.0-alpha12"
 }
 ```
 

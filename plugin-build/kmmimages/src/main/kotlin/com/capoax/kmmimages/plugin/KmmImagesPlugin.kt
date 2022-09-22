@@ -14,6 +14,7 @@ class KmmImagesPlugin: Plugin<Project> {
             it.sharedModuleFolder.set(extension.sharedModuleFolder.get())
             it.usePdf2SvgTool.set(extension.usePdf2SvgTool.get())
             it.defaultLanguage.set(extension.defaultLanguage.get())
+            it.kotlinMainSourceFolder.set(extension.kotlinMainSourceFolder.get())
         }
     }
 }

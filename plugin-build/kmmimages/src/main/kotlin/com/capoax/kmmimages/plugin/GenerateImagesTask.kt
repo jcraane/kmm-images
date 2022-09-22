@@ -35,6 +35,11 @@ abstract class GenerateImagesTask : DefaultTask() {
     @get:Option(option = "defaultLanguage", description = "The default locale. Used in Android to determine which language is in the default drawable folder.")
     abstract val defaultLanguage: Property<String>
 
+    @get:Input
+    @get:Option(option = "kotlinMainSourceFolder", description = "The name of the main Kotlin source folder for the generated Images " +
+            "class. Defaults to commonMain")
+    abstract val kotlinMainSourceFolder: Property<String>
+
     @TaskAction
     fun generate() {
         project.logger.info("About to generate images for all supported platforms.")
@@ -46,7 +51,8 @@ abstract class GenerateImagesTask : DefaultTask() {
             packageName = packageName.get(),
             logger = project.logger,
             usePdf2SvgTool = usePdf2SvgTool.get(),
-            defaultLanguage = defaultLanguage.get()
+            defaultLanguage = defaultLanguage.get(),
+            kotlinMainSourceFolder = kotlinMainSourceFolder.get(),
         ).generate()
     }
 

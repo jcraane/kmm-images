@@ -24,6 +24,10 @@ abstract class KmmImagesExtension @Inject constructor(project: Project) {
         set("en")
     }
 
+    val kotlinMainSourceFolder: Property<String> = objects.property(String::class.java).apply {
+        set("commonMain")
+    }
+
     companion object {
         const val NAME = "kmmImagesConfig"
     }
