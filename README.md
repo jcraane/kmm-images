@@ -85,7 +85,7 @@ The above snippet applies the kmmimages plugin and configures it.
 - packageName. The package to use for the generated Images class.
 - defaultLanguage. The default language which will be used for the Android drawable resource folders.
 - usePdf2SvgTool. When true, uses the pdf2svg tool to convert pdf's to svg. Sometimes this yield better results than imagemagick.
-- kotlinMainSourceFolder. Main source folder where the generated code is placed. Defaults to commonMain. When this plugin is used in a standalone Android app set to 'main'.
+- kotlinMainSourceFolder. Main source folder where the generated code is placed. Defaults to commonMain. When this plugin is used in a standalone Android app, set kotlinMainSourceFolder to 'main'.
 
 Next, setup the generateImages task and hook it up into the build phase:
 
