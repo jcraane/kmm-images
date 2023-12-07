@@ -24,6 +24,10 @@ abstract class GenerateImagesTask : DefaultTask() {
     abstract val packageName: Property<String>
 
     @get:Input
+    @get:Option(option = "imageInterface", description = "An optional interface to add to the generated Image class.")
+    abstract val imageInterface: Property<String>
+
+    @get:Input
     @get:Option(option = "androidResFolder", description = "The source folder to generate the localizations class for Android. Defaults to main, but some multiplatform projects use androidMain.")
     abstract val androidResFolder: Property<File>
 
@@ -49,6 +53,7 @@ abstract class GenerateImagesTask : DefaultTask() {
             sharedModuleFolder = sharedModuleFolder.get(),
             androidResFolder = androidResFolder.get(),
             packageName = packageName.get(),
+            imageInterface = imageInterface.get().ifEmpty { null },
             logger = project.logger,
             usePdf2SvgTool = usePdf2SvgTool.get(),
             defaultLanguage = defaultLanguage.get(),

@@ -26,6 +26,7 @@ class Generator(
     val sharedModuleFolder: File,
     val androidResFolder: File,
     val packageName: String,
+    val imageInterface: String?,
     val logger: Logger,
     val usePdf2SvgTool: Boolean,
     val defaultLanguage: String,
@@ -42,7 +43,7 @@ class Generator(
 
         val androidImageConverter = AndroidImageConverter(androidResFolder, androidPathResolver, logger)
         val iosImageConverter = IOSImageConverter(iosBuildFolder, logger)
-        val codeGenerator = CodeGenerator(packageName)
+        val codeGenerator = CodeGenerator(packageName, imageInterface)
 
         val supportedFilesFilter = FileFilter { supportedFormats.contains(it.extension) }
 
