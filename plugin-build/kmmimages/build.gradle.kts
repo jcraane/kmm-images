@@ -17,39 +17,29 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 gradlePlugin {
     plugins {
         create("KmmImages") {
             id = "dev.jamiecraane.plugins.kmmimages"
+            displayName = "Gradle plugin for generating localizable resources for Android and iOS in a Kotlin Multiplatform Mobile project"
+            description = "Gradle plugin for generating localizable resources for Android and iOS in a Kotlin Multiplatform Mobile project for use in the UI, android, iOS and shared framework code."
             implementationClass = "com.capoax.kmmimages.plugin.KmmImagesPlugin"
             description = description
-            version = "1.0.0-alpha13"
-        }
-    }
-}
-
-// Configuration Block for the Plugin Marker artifact on Plugin Central
-pluginBundle {
-    website = "https://github.com/jcraane/kmm-images"
-    vcsUrl = "https://github.com/jcraane/kmm-images.git"
-    description = "Gradle plugin for generating localizable resources for Android and iOS in a Kotlin Multiplatform Mobile project for use in the UI, android, iOS and shared framework code."
-    tags = listOf(
-        "plugin",
-        "gradle",
-        "kmm",
-        "multiplatform",
-        "android",
-        "ios"
-    )
-
-
-    plugins {
-        getByName("KmmImages") {
-            displayName = "Gradle plugin for generating localizable resources for Android and iOS in a Kotlin Multiplatform Mobile project"
+            version = "1.0.0-alpha14"
+            tags = listOf(
+                "plugin",
+                "gradle",
+                "kmm",
+                "multiplatform",
+                "android",
+                "ios"
+            )
+            website = "https://github.com/jcraane/kmm-images"
+            vcsUrl = "https://github.com/jcraane/kmm-images.git"
         }
     }
 }

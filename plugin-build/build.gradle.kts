@@ -1,8 +1,8 @@
 //import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
-    kotlin("jvm") version "1.6.0" apply false
-    id("com.gradle.plugin-publish") version "0.12.0" apply false
+    kotlin("jvm") version "1.9.21"
+    id("com.gradle.plugin-publish") version "1.2.1" apply false
 }
 
 allprojects {
@@ -12,8 +12,4 @@ allprojects {
         google()
         mavenCentral()
     }
-}
-
-tasks.register("clean", Delete::class.java) {
-    delete(rootProject.buildDir)
 }

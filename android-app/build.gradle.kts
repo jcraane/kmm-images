@@ -30,6 +30,7 @@ repositories {
 }
 
 kotlin {
+
     android()
     listOf(
         iosX64(),
@@ -78,13 +79,14 @@ kotlin {
 }
 
 android {
-    compileSdk = 31
-    buildToolsVersion = "30.0.3"
+    namespace = "nl.jcraane.androidapp"
+    compileSdk = 33
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "nl.jcraane.androidapp"
         minSdk = 22
-        targetSdk = 31
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
